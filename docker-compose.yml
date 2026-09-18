@@ -1,0 +1,44 @@
+services:
+  web:
+    build:
+      context: ./app
+      dockerfile: ../Dockerfile
+      target: runtime
+      # Host's router silently drops DNS queries from the Docker bridge
+      # subnet, hanging `npm ci` mid-build. Building with the host network
+      # namespace uses the host's (working) DNS resolution instead.
+      network: host
+    container_name: ${APP_SLUG}
+    restart: unless-stopped
+    env_file:
+      - .env
+    networks:
+      - backend
+      - proxy
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: json-file
+      options:
+        max-size: '10m'
+        max-file: '3'
+    deploy:
+      resources:
+        limits:
+          cpus: '${CPU_LIMIT:-1.0}'
+          memory: ${MEMORY_LIMIT:-512M}
+        reservations:
+          memory: ${MEMORY_RESERVATION:-128M}
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${APP_SLUG}.rule=Host(`${APP_DOMAIN}`) || Host(`${APP_DOMAIN_DEMO:-${APP_DOMAIN}}`)
+      - traefik.http.routers.${APP_SLUG}.entrypoints=websecure
+      - traefik.http.routers.${APP_SLUG}.tls=true
+      - traefik.http.routers.${APP_SLUG}.tls.certresolver=letsencrypt
+      - traefik.http.services.${APP_SLUG}.loadbalancer.server.port=${PORT:-3000}
+networks:
+  backend:
+    external: true
+    name: backend
+  proxy:
+    external: true

@@ -1,0 +1,37 @@
+services:
+  admin:
+    build:
+      context: ./app
+      dockerfile: ../Dockerfile
+      target: dev
+      # Host's router silently drops DNS queries from the Docker bridge
+      # subnet, hanging `npm ci` mid-build. Building with the host network
+      # namespace uses the host's (working) DNS resolution instead.
+      network: host
+    container_name: ${APP_SLUG}-dev
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=${CHOKIDAR_USEPOLLING:-false}
+    volumes:
+      - ./app:/app
+      - /app/node_modules
+    ports:
+      - '${DEV_APP_PORT:-3000}:${PORT:-3000}'
+      - '${DEV_VITE_PORT:-5173}:5173'
+    networks:
+      - backend
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=${TRAEFIK_NETWORK:-backend}
+      - traefik.http.routers.${APP_SLUG}-dev.rule=Host(`${APP_DOMAIN}`) || Host(`${APP_DOMAIN_DEMO:-${APP_DOMAIN}}`)
+      - traefik.http.services.${APP_SLUG}-dev.loadbalancer.server.port=5173
+    stdin_open: true
+    tty: true
+
+networks:
+  backend:
+    external: true
+    name: backend
