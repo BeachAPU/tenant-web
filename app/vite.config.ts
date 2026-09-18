@@ -47,6 +47,9 @@ export default defineConfig({
         allowedHosts: [process.env.APP_DOMAIN, process.env.APP_DOMAIN_DEMO].filter(
             (h): h is string => Boolean(h)
         ),
+        proxy: {
+            '/api': `http://localhost:${process.env.PORT || 3000}`,
+        },
     },
     plugins: [svgr(), react()],
 });
