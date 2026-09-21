@@ -10,15 +10,15 @@ import { AMLogo, AMMenu, AMMenuItem, AMSidebar, AMSubmenu } from 'tailwind-sideb
 import 'tailwind-sidebar/styles.css';
 
 interface SidebarItemType {
-  heading?: string
-  id?: number | string
-  name?: string
-  title?: string
-  icon?: string
-  url?: string
-  children?: SidebarItemType[]
-  disabled?: boolean
-  isPro?: boolean
+  heading?: string;
+  id?: number | string;
+  name?: string;
+  title?: string;
+  icon?: string;
+  url?: string;
+  children?: SidebarItemType[];
+  disabled?: boolean;
+  isPro?: boolean;
 }
 
 const renderSidebarItems = (
@@ -136,19 +136,6 @@ const SidebarLayout = ({ onClose }: { onClose?: () => void }) => {
               )}
             </div>
           ))}
-
-          {/* Promo Section */}
-          <div className="mt-9 overflow-hidden">
-            <div className="flex w-full bg-lightprimary rounded-lg p-6">
-              <div className="lg:w-1/2 w-full">
-                <h5 className="text-base text-sidebar-foreground">Haven't Account?</h5>
-                <Button className="whitespace-nowrap mt-2 text-[13px]">Get Pro</Button>
-              </div>
-              <div className="lg:w-1/2 w-full -mt-4 ml-[26px] scale-[1.2] shrink-0">
-                <img src={rocket} alt="rocket" />
-              </div>
-            </div>
-          </div>
         </div>
       </SimpleBar>
     </AMSidebar>
