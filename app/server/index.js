@@ -3,6 +3,8 @@ import session from 'express-session';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { callLaravel } from './laravel-client.js';
+import { resolveEnvironment } from './environment.js';
+import { registerTicketRoutes } from './tickets.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DEVICE_NAME = 'tenant-web';
@@ -29,15 +31,20 @@ app.get('/api/health', (_req, res) => {
   res.status(200).json({ status: 'ok' });
 });
 
-// APP_DOMAIN_DEMO (if configured) serves the same instance against the
-// customer's `demo` CustomerEnvironment instead of `live` - resolved fresh
-// from the Host the browser actually used on every request that needs it
-// (not cached on the session), matching the API's per-request
-// X-Tenant-Environment semantics (see .env.example).
-function resolveEnvironment(req) {
-  return req.hostname === process.env.APP_DOMAIN_DEMO ? 'demo' : 'live';
-}
-
+// The HAZ-APP planning docs (PLANING/system/CLAUDE.md "Login is split by
+// portal") describe a *target* design where `global_users` accounts are
+// split staff-vs-contact across two separate Laravel endpoints
+// (`/tenant/login` vs `/tenant/resident/login`). Checked directly against
+// the actual API (app/Http/Controllers/Auth/TenantAuthController.php) as of
+// 2026-09-21: that split isn't built yet. There is only one tenant login
+// endpoint, `/api/tenant/login`, and its `login()` method never checks
+// `account_type` - it accepts any `global_users` row (staff or
+// owner/resident contact) with matching credentials and `is_active`. As of
+// 2026-09-21 `GlobalUserResource` DOES now expose `account_type` in its
+// response (that part landed), but `login()` still doesn't gate on it, so
+// this BFF still has no enforced way to reject a staff login itself - that
+// gate has to be added on the API side first. Until then, this app works
+// exactly like tenant-admin-ui's BFF against this same endpoint.
 app.post('/api/tenant/login', async (req, res) => {
   const { email, password } = req.body ?? {};
   if (!email || !password) {
@@ -100,6 +107,105 @@ app.post('/api/tenant/logout', async (req, res) => {
     res.status(204).end();
   });
 });
+
+// Self-service password reset - confirmed real and working today:
+// `TenantAuthController::forgotPassword()`/`resetPassword()`, backed by the
+// `global_users` password broker (Password::broker('global_users')), not
+// scoped to staff vs. contact in any way (same as login above).
+app.post('/api/tenant/forgot-password', async (req, res) => {
+  const { email } = req.body ?? {};
+  if (!email) {
+    res.status(422).json({ error_code: 'validation_error', message: 'Email is required.' });
+    return;
+  }
+
+  try {
+    const result = await callLaravel('/api/tenant/forgot-password', {
+      method: 'POST',
+      body: { email },
+      environment: resolveEnvironment(req),
+    });
+    // Enumeration-safe per TENANTS.md: forward Laravel's generic response
+    // as-is rather than distinguishing "unknown email" from "sent".
+    res.status(result.status).json(result.body ?? {});
+  } catch {
+    res.status(502).json({
+      error_code: 'upstream_unreachable',
+      message: 'Could not reach the tenant API.',
+    });
+  }
+});
+
+app.post('/api/tenant/reset-password', async (req, res) => {
+  const { email, token, password, password_confirmation } = req.body ?? {};
+  if (!email || !token || !password || !password_confirmation) {
+    res.status(422).json({
+      error_code: 'validation_error',
+      message: 'Email, token, and both password fields are required.',
+    });
+    return;
+  }
+
+  try {
+    const result = await callLaravel('/api/tenant/reset-password', {
+      method: 'POST',
+      body: { email, token, password, password_confirmation },
+      environment: resolveEnvironment(req),
+    });
+    res.status(result.status).json(result.body ?? {});
+  } catch {
+    res.status(502).json({
+      error_code: 'upstream_unreachable',
+      message: 'Could not reach the tenant API.',
+    });
+  }
+});
+
+// UI preferences (theme/language) - NOT live yet. Checked against the real
+// API (`php artisan route:list`) on 2026-09-21: `PATCH /api/tenant/me/preferences`
+// doesn't exist (only admin-ui's own `PATCH /api/me/preferences` does), and
+// `GlobalUser` has no `theme` column yet either - FEATURES.md describes this
+// as in-progress work for tenant-admin-ui, not yet landed, with tenant-web-ui
+// reusing it vs. getting its own endpoint still an open question. This BFF
+// route is wired ahead of the endpoint on purpose (same "build against the
+// contract before it lands" approach FEATURES.md says tenant-admin-ui's
+// frontend is taking) - it will 502/404 until the API adds this route, which
+// `AuthProvider.savePreferences()` on the client already treats as a
+// best-effort, swallowed failure (the local theme/language switch still
+// applies immediately either way).
+app.patch('/api/tenant/me/preferences', async (req, res) => {
+  if (!req.session.token) {
+    res.status(401).json({ error_code: 'unauthenticated', message: 'Not signed in.' });
+    return;
+  }
+
+  const { theme, locale } = req.body ?? {};
+  const preferences = {
+    ...(theme !== undefined ? { theme } : {}),
+    ...(locale !== undefined ? { locale } : {}),
+  };
+
+  try {
+    const result = await callLaravel('/api/tenant/me/preferences', {
+      method: 'PATCH',
+      body: preferences,
+      token: req.session.token,
+      environment: resolveEnvironment(req),
+    });
+
+    if (result.status >= 200 && result.status < 300) {
+      req.session.user = { ...req.session.user, ...preferences };
+    }
+    res.status(result.status).json(result.body ?? {});
+  } catch {
+    res.status(502).json({
+      error_code: 'upstream_unreachable',
+      message: 'Could not reach the tenant API.',
+    });
+  }
+});
+
+registerTicketRoutes(app);
 
 app.use(express.static(path.join(__dirname, '..', 'dist')));
 app.get(/^(?!\/api\/).*/, (_req, res) => {

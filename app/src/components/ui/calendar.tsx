@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
+import { AngleLeftIcon, AngleRightIcon, ChevronDownIcon } from 'src/icons';
 import { DayButton, DayPicker, getDefaultClassNames } from 'react-day-picker';
 
 import { cn } from 'src/lib/utils';
@@ -108,11 +108,11 @@ function Calendar({
         },
         Chevron: ({ className, orientation, ...props }) => {
           if (orientation === 'left') {
-            return <ChevronLeftIcon className={cn('size-4', className)} {...props} />;
+            return <AngleLeftIcon className={cn('size-4 [&_path]:stroke-current', className)} {...props} />;
           }
 
           if (orientation === 'right') {
-            return <ChevronRightIcon className={cn('size-4', className)} {...props} />;
+            return <AngleRightIcon className={cn('size-4 [&_path]:stroke-current', className)} {...props} />;
           }
 
           return <ChevronDownIcon className={cn('size-4', className)} {...props} />;

@@ -1,0 +1,241 @@
+/*
+ * Brand dark-mode styling, ported from ../tenant-admin/app/src/css/theme/dark-theme.css.
+ * The class/palette contract is documented in .helpers/DESIGN.md — use these
+ * `.light-*` classes rather than inline colours. Imported from App.tsx after
+ * css/globals.css.
+ *
+ * Scoping: `:root:not(.dark) .foo` = light only, `:root.dark .foo` = dark only,
+ * plain `:root .foo` = both modes (shape: radius, weight). The `:root` prefix
+ * gives these rules enough specificity to beat the Tailwind utilities they
+ * override regardless of import order.
+ */
+
+:root.dark body {
+  background: linear-gradient(180deg, #081844 39.45%, #13bf7d 171.29%);
+  background-attachment: fixed;
+}
+
+:root.dark .dark-chrome-ghost {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+:root.dark .light-panel {
+  background: #091330;
+  box-shadow: none;
+}
+
+:root.dark .light-panel-inner {
+  background: rgba(8, 24, 68, 0.5);
+}
+
+:root.dark .light-text-navy {
+  color: #ffffff;
+}
+
+:root.dark .light-nav-active {
+  background: linear-gradient(90deg, #dddddd 0%, #eeeeee 100%);
+  color: #081844;
+}
+
+:root.dark .light-nav-active .menu-item-icon-active {
+  color: #081844;
+}
+
+:root.dark .light-nav-text {
+  color: #ffffff;
+}
+
+:root.dark .light-nav-text .menu-item-icon-inactive {
+  color: #ffffff;
+}
+
+:root.dark .light-search-input {
+  background: #081844;
+  border: 0.5px solid rgba(255, 255, 255, 0.25);
+}
+
+:root.dark .light-search-input::placeholder {
+  color: #ffffff;
+  opacity: 0.55;
+}
+
+:root.dark .light-icon-btn {
+  background: #dddddd;
+  color: #081844;
+}
+
+:root.dark .light-icon-btn:hover {
+  background: #cfcfcf;
+  color: #081844;
+}
+
+:root.dark .light-lang-active {
+  background: rgba(8, 24, 68, 0.15);
+  color: #081844;
+}
+
+:root.dark .light-lang-inactive {
+  color: rgba(8, 24, 68, 0.6);
+}
+
+:root.dark .light-lang-inactive:hover {
+  color: #081844;
+}
+
+:root.dark .light-logo-text {
+  color: #dddddd;
+}
+
+
+/* ---- Design-guide additions (see .helpers/DESIGN.md) ---- */
+
+:root.dark .light-input {
+  background: #081844;
+  border: 0.5px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+:root.dark .light-input::placeholder {
+  color: #ffffff;
+  opacity: 0.55;
+}
+
+:root.dark .light-input option {
+  background: #081844;
+  color: #ffffff;
+}
+
+:root.dark .light-btn-outline {
+  background: transparent;
+  color: #ffffff;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+}
+
+:root.dark .light-btn-outline:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+:root.dark .light-link-action {
+  color: #ffffff;
+}
+
+:root.dark .light-link-action:hover {
+  color: #dddddd;
+}
+
+:root.dark .light-muted {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+:root.dark .light-tab {
+  color: #ffffff;
+}
+
+:root.dark .light-tab:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+:root.dark .light-tab-active,
+:root.dark .light-tab-active:hover,
+:root.dark .light-tab[data-state='active'],
+:root.dark .light-tab[data-state='active']:hover {
+  background: linear-gradient(90deg, #dddddd 0%, #eeeeee 100%);
+  color: #081844;
+}
+
+:root.dark .light-modal {
+  background: #091330;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+:root.dark .light-input.light-input-empty {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* ---- tenant-admin: tailwind-sidebar integration (see light-theme.css) ---- */
+:root.dark .shadcn_menu_item.light-nav-active {
+  background: linear-gradient(90deg, #dddddd 0%, #eeeeee 100%) !important;
+  color: #081844 !important;
+}
+
+:root.dark .shadcn_menu_item.light-nav-text:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* FileDropzone - see light-theme.css. */
+:root.dark .light-input.light-dropzone {
+  border-style: dashed;
+  border-width: 1px;
+}
+
+:root.dark .light-input.light-dropzone-active {
+  border-color: #dddddd;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Auth pages - see light-theme.css. The solid page colour covers the app's
+   body gradient on purpose (DESIGN.md §11.3). The input/checkbox base rules
+   use :where() so the focus/error/checked states in light-theme.css (loaded
+   earlier) still win over them. */
+:root.dark .light-auth-page {
+  background: #101828;
+}
+
+:root.dark .light-auth-panel {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+:root.dark .light-auth-title {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+:root.dark .light-auth-subtitle,
+:root.dark .light-auth-label,
+:root.dark .light-auth-eye {
+  color: #98a2b3;
+}
+
+:root.dark .light-auth-link,
+:root.dark .light-auth-link:hover {
+  color: #7592ff;
+}
+
+:root.dark :where(.light-auth-input) {
+  background: #081844;
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+:root.dark .light-auth-input::placeholder {
+  color: #ffffff;
+  opacity: 0.55;
+}
+
+:root.dark .light-auth-input.light-auth-input-error {
+  background: #101828;
+  color: #f97066;
+}
+
+:root.dark :where(.light-auth-checkbox) {
+  border-color: #344054;
+}
+
+:root.dark .light-auth-banner-error {
+  border-color: rgba(240, 68, 56, 0.3);
+  background: rgba(240, 68, 56, 0.15);
+  color: #f97066;
+}
+
+:root.dark .light-auth-banner-success {
+  border-color: rgba(18, 183, 106, 0.3);
+  background: rgba(18, 183, 106, 0.15);
+  color: #32d583;
+}
+
+/* Header bar - see light-theme.css. */
+:root.dark .light-header,
+:root.dark .light-header .light-header-line {
+  background: #081844;
+  border-color: #1d2939;
+}

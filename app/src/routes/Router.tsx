@@ -1,10 +1,11 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { lazy } from 'react';
-import { Navigate, createBrowserRouter } from 'react-router';
+import { Navigate, Outlet, createBrowserRouter } from 'react-router';
 import Loadable from '../layouts/full/shared/loadable/Loadable';
 import RequireAuth from './RequireAuth';
 import RedirectIfAuthenticated from './RedirectIfAuthenticated';
+import { TicketsProvider } from '../context/tickets-context';
 
 /* ***Layouts**** */
 const FullLayout = Loadable(lazy(() => import('../layouts/full/FullLayout')));
@@ -14,15 +15,19 @@ const BlankLayout = Loadable(lazy(() => import('../layouts/blank/BlankLayout')))
 
 const Login1 = Loadable(lazy(() => import('../views/authentication/auth1/Login')));
 
-const Login2 = Loadable(lazy(() => import('../views/authentication/auth2/Login')));
-
-const Register2 = Loadable(lazy(() => import('../views/authentication/auth2/Register')));
-
 const Maintainance = Loadable(lazy(() => import('../views/authentication/Maintainance')));
+const ForgotPassword = Loadable(lazy(() => import('../views/authentication/ForgotPassword')));
+const ResetPassword = Loadable(lazy(() => import('../views/authentication/ResetPassword')));
 
 //pages
+const Home = Loadable(lazy(() => import('../views/pages/home/Home')));
 const UserProfile = Loadable(lazy(() => import('../views/pages/user-profile/UserProfile')));
 const Settings = Loadable(lazy(() => import('../views/pages/settings/Settings')));
+
+// issues
+const IssuesList = Loadable(lazy(() => import('../views/pages/issues/IssuesList')));
+const CreateIssue = Loadable(lazy(() => import('../views/pages/issues/CreateIssue')));
+const IssueDetail = Loadable(lazy(() => import('../views/pages/issues/IssueDetail')));
 
 const Error = Loadable(lazy(() => import('../views/authentication/Error')));
 
@@ -34,11 +39,24 @@ const Router = [
       {
         element: <FullLayout />,
         children: [
-          { path: '/', exact: true, element: <Navigate to="/user-profile" /> },
+          { path: '/', exact: true, element: <Home /> },
           { path: '*', element: <Navigate to="/auth/404" /> },
 
           { path: '/user-profile', element: <UserProfile /> },
           { path: '/settings', element: <Settings /> },
+
+          {
+            element: (
+              <TicketsProvider>
+                <Outlet />
+              </TicketsProvider>
+            ),
+            children: [
+              { path: '/issues', element: <IssuesList /> },
+              { path: '/issues/new', element: <CreateIssue /> },
+              { path: '/issues/:id', element: <IssueDetail /> },
+            ],
+          },
         ],
       },
     ],
@@ -57,19 +75,19 @@ const Router = [
       },
 
       {
-        path: '/auth/auth2/login',
+        path: '/auth/forgot-password',
         element: (
           <RedirectIfAuthenticated>
-            <Login2 />
+            <ForgotPassword />
           </RedirectIfAuthenticated>
         ),
       },
 
       {
-        path: '/auth/auth2/register',
+        path: '/auth/reset-password',
         element: (
           <RedirectIfAuthenticated>
-            <Register2 />
+            <ResetPassword />
           </RedirectIfAuthenticated>
         ),
       },

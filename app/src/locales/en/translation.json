@@ -1,0 +1,207 @@
+{
+  "common": {
+    "email": "Email",
+    "password": "Password",
+    "save": "Save",
+    "cancel": "Cancel",
+    "loading": "Loading…",
+    "active": "Active",
+    "inactive": "Inactive",
+    "goBackHome": "Go Back to Home",
+    "backToLogin": "Back to login",
+    "delete": "Delete"
+  },
+  "nav": {
+    "home": "Home",
+    "account": "Account",
+    "userProfile": "User Profile",
+    "settings": "Settings",
+    "myIssues": "My Issues",
+    "myHome": "My Home"
+  },
+  "home": {
+    "welcomeTitle": "Welcome back, {{name}}",
+    "welcomeSubtitle": "Here's your account at a glance.",
+    "profileCardDescription": "View your account details and contact information.",
+    "settingsCardDescription": "Manage your appearance and language preferences.",
+    "issuesCardDescription": "Report a problem in your building and follow its progress."
+  },
+  "header": {
+    "logout": "Logout",
+    "notifications": "Notifications",
+    "searchPlaceholder": "Search....",
+    "myProfile": "My Profile",
+    "theme": "Theme",
+    "language": "Language",
+    "lightMode": "Light mode",
+    "darkMode": "Dark mode",
+    "toggleSidebar": "Toggle Sidebar",
+    "moreActions": "More",
+    "close": "Close",
+    "noNotifications": "No notifications yet."
+  },
+  "auth": {
+    "login": {
+      "emailLabel": "Email",
+      "passwordLabel": "Password",
+      "submit": "Sign In",
+      "submitting": "Signing in...",
+      "forgotPasswordLink": "Forgot password?",
+      "title": "Sign In",
+      "subtitle": "Enter your email and password to sign in!",
+      "emailPlaceholder": "info@gmail.com",
+      "passwordPlaceholder": "Enter your password",
+      "keepLoggedIn": "Keep me logged in"
+    },
+    "forgotPassword": {
+      "title": "Forgot your password?",
+      "subtitle": "Enter your email and we'll send you a link to reset your password.",
+      "emailLabel": "Email",
+      "submit": "Send reset link",
+      "submitting": "Sending…",
+      "successMessage": "If an account exists for that email, a reset link is on its way.",
+      "backToLogin": "Back to sign in"
+    },
+    "resetPassword": {
+      "title": "Reset your password",
+      "subtitle": "Choose a new password for your account.",
+      "passwordLabel": "New password",
+      "confirmPasswordLabel": "Confirm new password",
+      "submit": "Reset password",
+      "submitting": "Resetting…",
+      "successMessage": "Your password has been reset. You can now sign in.",
+      "invalidToken": "This reset link is invalid or has expired. Please request a new one.",
+      "passwordMismatch": "Passwords do not match.",
+      "genericError": "Something went wrong. Please try again.",
+      "backToLogin": "Back to sign in",
+      "subtitleWithEmail": "Choose a new password for {{email}}.",
+      "requirementsHint": "At least 8 characters, with upper and lower case letters, a number and a symbol."
+    }
+  },
+  "profile": {
+    "title": "User Profile",
+    "breadcrumbHome": "Home",
+    "accountDetails": "Account Details",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "role": "Role",
+    "locale": "Locale",
+    "environment": "Environment",
+    "memberSince": "Member Since",
+    "lastUpdated": "Last Updated"
+  },
+  "settings": {
+    "title": "Settings",
+    "breadcrumbHome": "Home",
+    "appearanceTitle": "Appearance",
+    "appearanceSubtitle": "Choose how the admin dashboard looks on this device.",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "themeSystem": "System",
+    "languageTitle": "Language",
+    "languageSubtitle": "Choose the language used across the app.",
+    "languageEnglish": "English",
+    "languageHungarian": "Hungarian",
+    "accountTitle": "Account",
+    "email": "Email",
+    "role": "Role",
+    "locale": "Locale",
+    "environment": "Environment"
+  },
+  "issues": {
+    "listTitle": "My Issues",
+    "breadcrumbHome": "Home",
+    "newIssueButton": "New Issue",
+    "emptyState": "You haven't reported any issues yet.",
+    "loadError": "Couldn't load your issues. Please try again.",
+    "table": {
+      "title": "Title",
+      "building": "Building",
+      "apartment": "Apartment",
+      "status": "Status",
+      "priority": "Priority",
+      "category": "Category",
+      "createdAt": "Reported on",
+      "buildingWide": "Building-wide"
+    },
+    "filters": {
+      "statusLabel": "Status",
+      "statusAll": "All statuses"
+    },
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next",
+      "pageInfo": "Page {{current}} of {{total}}"
+    },
+    "create": {
+      "title": "Report an Issue",
+      "subtitle": "Tell us what's going on and where - staff will pick it up from there.",
+      "buildingLabel": "Building",
+      "buildingPlaceholder": "Search for your building…",
+      "buildingSearchEmpty": "No buildings found.",
+      "apartmentLabel": "Apartment",
+      "apartmentPlaceholder": "Search for your apartment…",
+      "apartmentSearchEmpty": "No apartments found.",
+      "apartmentSelected": "Apartment {{doorNumber}}",
+      "apartmentHelp": "Leave this blank to report an issue affecting the whole building.",
+      "skipApartment": "This affects the whole building",
+      "categoryLabel": "Category",
+      "categoryPlaceholder": "Select a category",
+      "priorityLabel": "Priority",
+      "priorityPlaceholder": "Select a priority",
+      "titleLabel": "Title",
+      "titlePlaceholder": "Short summary of the issue",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Add any extra detail that might help",
+      "submit": "Submit Issue",
+      "submitting": "Submitting…",
+      "successMessage": "Your issue has been reported.",
+      "genericError": "Something went wrong. Please try again.",
+      "backToList": "Back to My Issues"
+    },
+    "detail": {
+      "reportedBy": "Reported by",
+      "reportedOn": "Reported on",
+      "building": "Building",
+      "apartment": "Apartment",
+      "buildingWideNotice": "This issue affects the whole building",
+      "category": "Category",
+      "priority": "Priority",
+      "status": "Status",
+      "description": "Description",
+      "noDescription": "No description provided.",
+      "tabDetails": "Details",
+      "tabNotes": "Notes",
+      "tabHistory": "History",
+      "notesEmpty": "No messages yet.",
+      "noteBodyPlaceholder": "Write a reply…",
+      "postNote": "Post reply",
+      "posting": "Posting…",
+      "noteError": "Couldn't post your reply. Please try again.",
+      "historyEmpty": "No changes recorded yet.",
+      "historyEntry": "{{field}} changed from {{oldValue}} to {{newValue}}",
+      "confirmCloseButton": "Confirm Fix & Close",
+      "confirmCloseDialogTitle": "Confirm this issue is fixed?",
+      "confirmCloseDialogBody": "This will close the issue. You can still reopen it later if needed.",
+      "reopenButton": "Not Fixed / Reopen",
+      "reopenDialogTitle": "Reopen this issue?",
+      "reopenDialogBody": "This will send the issue back to staff for another look.",
+      "actionPendingNotice": "Staff are working on this issue.",
+      "updateError": "Couldn't update this issue. Please try again.",
+      "loadError": "Couldn't load this issue. Please try again.",
+      "notFound": "This issue could not be found."
+    },
+    "allIssues": "All issues"
+  },
+  "errors": {
+    "notFound": {
+      "title": "Oops!!!",
+      "message": "This page you are looking for could not be found."
+    },
+    "maintenance": {
+      "title": "Maintenance Mode!!!",
+      "message": "Website is Under Construction. Check back later!"
+    }
+  }
+}

@@ -1,0 +1,402 @@
+/*
+ * Brand light-mode styling, ported from ../tenant-admin/app/src/css/theme/light-theme.css.
+ * The class/palette contract is documented in .helpers/DESIGN.md — use these
+ * `.light-*` classes rather than inline colours. Imported from App.tsx after
+ * css/globals.css.
+ *
+ * Scoping: `:root:not(.dark) .foo` = light only, `:root.dark .foo` = dark only,
+ * plain `:root .foo` = both modes (shape: radius, weight). The `:root` prefix
+ * gives these rules enough specificity to beat the Tailwind utilities they
+ * override regardless of import order.
+ */
+
+:root:not(.dark) .light-panel {
+  background: #f6f6f6;
+  box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.15);
+}
+
+:root .light-panel-inner {
+  border-radius: 12px;
+  border-top: 0;
+}
+
+:root:not(.dark) .light-panel-inner {
+  background: #ffffff;
+}
+
+:root .light-nav-active {
+  border-radius: 16px;
+  font-weight: 600;
+}
+
+:root:not(.dark) .light-nav-active {
+  background: #153caa;
+  color: #ffffff;
+}
+
+:root:not(.dark) .light-nav-active .menu-item-icon-active {
+  color: #ffffff;
+}
+
+:root .light-nav-text {
+  font-weight: 600;
+}
+
+:root:not(.dark) .light-nav-text {
+  color: #091330;
+}
+
+:root:not(.dark) .light-nav-text .menu-item-icon-inactive {
+  color: #091330;
+}
+
+:root .light-search-input {
+  border-radius: 16px;
+}
+
+:root:not(.dark) .light-search-input {
+  background: #f6f6f6;
+  border: 0.5px solid rgba(9, 19, 48, 0.25);
+}
+
+:root:not(.dark) .light-search-input::placeholder {
+  color: #091330;
+  opacity: 0.55;
+}
+
+:root .light-btn-primary {
+  background: #153caa;
+  border-radius: 16px;
+}
+
+:root .light-btn-primary:hover {
+  background: #102e82;
+}
+
+:root .light-badge-active {
+  background: #13bf7d;
+  color: #1e1e1e;
+}
+
+:root .light-link-edit {
+  color: #13bf7d;
+}
+
+:root .light-link-edit:hover {
+  color: #0fa06a;
+}
+
+:root .light-link-delete {
+  color: #d52b2e;
+}
+
+:root .light-link-delete:hover {
+  color: #b32224;
+}
+
+:root:not(.dark) .light-text-navy {
+  color: #091330;
+}
+
+:root .light-icon-btn {
+  border-color: transparent;
+}
+
+:root:not(.dark) .light-icon-btn {
+  background: #153caa;
+  color: #ffffff;
+}
+
+:root:not(.dark) .light-icon-btn:hover {
+  background: #102e82;
+  color: #ffffff;
+}
+
+:root:not(.dark) .light-lang-active {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+:root:not(.dark) .light-lang-inactive {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+:root:not(.dark) .light-lang-inactive:hover {
+  color: #ffffff;
+}
+
+:root:not(.dark) .light-logo-text {
+  color: #091330;
+}
+
+:root .light-icon-box {
+  background: transparent;
+  border-radius: 0;
+}
+
+/* ---- Design-guide additions (see .helpers/DESIGN.md) ---- */
+
+/* Form inputs/selects/textareas share the search box's shape + surface.
+   Applied by InputField/Select/TextArea only in the neutral state, so the
+   error/success border colours still win when set. */
+:root .light-input {
+  border-radius: 16px;
+}
+
+:root:not(.dark) .light-input {
+  background: #f6f6f6;
+  border: 0.5px solid rgba(9, 19, 48, 0.25);
+  color: #091330;
+}
+
+:root:not(.dark) .light-input::placeholder {
+  color: #091330;
+  opacity: 0.55;
+}
+
+:root .light-input:focus,
+:root .light-search-input:focus {
+  border-color: #153caa;
+}
+
+:root .light-btn-outline {
+  border-radius: 16px;
+}
+
+:root:not(.dark) .light-btn-outline {
+  background: #ffffff;
+  color: #091330;
+  box-shadow: inset 0 0 0 1px rgba(9, 19, 48, 0.25);
+}
+
+:root:not(.dark) .light-btn-outline:hover {
+  background: #f6f6f6;
+}
+
+:root .light-btn-danger {
+  background: #d52b2e;
+  border-radius: 16px;
+  color: #ffffff;
+}
+
+:root .light-btn-danger:hover {
+  background: #b32224;
+}
+
+:root:not(.dark) .light-link-action {
+  color: #153caa;
+}
+
+:root:not(.dark) .light-link-action:hover {
+  color: #102e82;
+}
+
+:root:not(.dark) .light-muted {
+  color: rgba(9, 19, 48, 0.6);
+}
+
+/* Page-section tabs: same pill language as the active sidebar item. */
+:root .light-tab {
+  border-radius: 16px;
+  font-weight: 600;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+:root:not(.dark) .light-tab {
+  color: #091330;
+}
+
+:root:not(.dark) .light-tab:hover {
+  background: rgba(21, 60, 170, 0.08);
+}
+
+:root:not(.dark) .light-tab-active,
+:root:not(.dark) .light-tab-active:hover,
+:root:not(.dark) .light-tab[data-state='active'],
+:root:not(.dark) .light-tab[data-state='active']:hover {
+  background: #153caa;
+  color: #ffffff;
+}
+
+:root .light-tab-active-danger,
+:root .light-tab-active-danger:hover,
+:root .light-tab.light-tab-danger[data-state='active'],
+:root .light-tab.light-tab-danger[data-state='active']:hover {
+  background: #d52b2e;
+  color: #ffffff;
+}
+
+:root .light-icon-danger {
+  background: #d52b2e;
+  color: #ffffff;
+  border-color: transparent;
+}
+
+:root:not(.dark) .light-modal {
+  background: #ffffff;
+}
+
+:root:not(.dark) .light-input.light-input-empty {
+  color: rgba(9, 19, 48, 0.55);
+}
+
+/* ---- tenant-admin: tailwind-sidebar integration ----
+   AMMenuItem paints its selected state with an inline style (background =
+   themeColor, color = #fff), so the active pill needs !important to win. */
+:root .shadcn_menu_item.light-nav-active {
+  border-radius: 16px;
+}
+
+:root:not(.dark) .shadcn_menu_item.light-nav-active {
+  background: #153caa !important;
+  color: #ffffff !important;
+}
+
+:root:not(.dark) .shadcn_menu_item.light-nav-text:hover {
+  background: rgba(21, 60, 170, 0.08);
+}
+
+/* FileDropzone (components/form/FileDropzone.tsx): the .light-input surface,
+   but dashed (the .light-input `border` shorthand would otherwise reset
+   border-dashed), a brand-blue border + faint wash while a file is dragged
+   over it, red when the picked file was rejected (`.light-input-error` is the
+   same red border for any other .light-input field, e.g. DatePicker). Chained with .light-input
+   so it outranks that rule; dark-theme.css repeats the mode-specific parts.
+   See .helpers/DESIGN.md "File upload". */
+:root .light-input.light-dropzone {
+  border-style: dashed;
+  border-width: 1px;
+}
+
+:root .light-input.light-dropzone-active {
+  border-color: #153caa;
+  background: rgba(21, 60, 170, 0.06);
+}
+
+:root .light-input.light-dropzone-error,
+:root .light-input.light-input-error {
+  border-color: #d52b2e;
+}
+
+/* Auth pages (views/authentication/AuthPageLayout.tsx + authforms/*): a copy
+   of admin-ui's TailAdmin login, value for value - see .helpers/DESIGN.md §11.
+   These deliberately keep a few TailAdmin colours (§11 exception), so they
+   are their own classes rather than the app's regular .light-* ones. */
+:root:not(.dark) .light-auth-page {
+  background: #ffffff;
+}
+
+:root:not(.dark) .light-auth-panel {
+  background: #161950;
+}
+
+:root:not(.dark) .light-auth-title {
+  color: #1d2939;
+}
+
+:root:not(.dark) .light-auth-subtitle,
+:root:not(.dark) .light-auth-eye {
+  color: #667085;
+}
+
+:root:not(.dark) .light-auth-label {
+  color: #344054;
+}
+
+:root .light-auth-required,
+:root .light-auth-hint-error {
+  color: #f04438;
+}
+
+:root .light-auth-hint {
+  color: #667085;
+}
+
+:root:not(.dark) .light-auth-link {
+  color: #465fff;
+}
+
+:root:not(.dark) .light-auth-link:hover {
+  color: #3641f5;
+}
+
+:root .light-auth-input {
+  border-radius: 16px;
+  border: 0.5px solid;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+  outline: none;
+}
+
+:root:not(.dark) .light-auth-input {
+  background: #f6f6f6;
+  border-color: rgba(9, 19, 48, 0.25);
+  color: #091330;
+}
+
+:root:not(.dark) .light-auth-input::placeholder {
+  color: #091330;
+  opacity: 0.55;
+}
+
+:root .light-auth-input:focus {
+  border-color: #153caa;
+  box-shadow: 0 0 0 3px rgba(70, 95, 255, 0.2);
+}
+
+:root .light-auth-input.light-auth-input-error {
+  border-color: #f04438;
+}
+
+:root:not(.dark) .light-auth-input.light-auth-input-error {
+  background: transparent;
+}
+
+:root .light-auth-input.light-auth-input-error:focus {
+  border-color: #fda29b;
+  box-shadow: 0 0 0 3px rgba(240, 68, 56, 0.2);
+}
+
+:root .light-auth-input:disabled {
+  background: #f2f4f7;
+  border-color: #d0d5dd;
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+:root .light-auth-checkbox {
+  border: 1px solid;
+  border-radius: 6px;
+}
+
+:root:not(.dark) .light-auth-checkbox {
+  border-color: #d0d5dd;
+}
+
+:root .light-auth-checkbox:checked {
+  background: #465fff;
+  border-color: transparent;
+}
+
+:root .light-auth-banner {
+  border: 1px solid;
+  border-radius: 8px;
+}
+
+:root:not(.dark) .light-auth-banner-error {
+  border-color: #f04438;
+  background: #fef3f2;
+  color: #d92d20;
+}
+
+:root:not(.dark) .light-auth-banner-success {
+  border-color: #12b76a;
+  background: #ecfdf3;
+  color: #039855;
+}
+
+/* Header bar (layouts/full/vertical/header/Header.tsx) - DESIGN.md §9.1. */
+:root:not(.dark) .light-header,
+:root:not(.dark) .light-header .light-header-line {
+  background: #ffffff;
+  border-color: #e4e7ec;
+}

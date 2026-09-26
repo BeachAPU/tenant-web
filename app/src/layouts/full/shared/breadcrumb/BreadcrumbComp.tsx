@@ -1,6 +1,4 @@
 import { JSX } from 'react';
-import CardBox from '../../../../components/shared/CardBox';
-import breadcrumbBg from 'src/assets/images/dashboard/customer-support-img.png';
 import { Link } from 'react-router';
 
 interface BreadcrumbItem {
@@ -15,55 +13,50 @@ interface BreadCrumbType {
   children?: JSX.Element;
 }
 
+// DESIGN.md §4: page title on the left, "Home > Page" trail on the right.
 const BreadcrumbComp = ({ title, items = [] }: BreadCrumbType) => {
   return (
-    <CardBox
-      className="mb-6 py-4 bg-lightsecondary overflow-hidden rounded-md border-none shadow-none! dark:shadow-none! relative"
-    >
-      <div className="grid grid-cols-12 gap-6 items-center">
-        <div className="col-span-10">
-          <h4 className="font-semibold text-xl mb-3">
-            {title}
-          </h4>
+    <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+      <h2 className="text-xl font-bold light-text-navy">{title}</h2>
 
-          <ol className="flex items-center whitespace-nowrap" aria-label="Breadcrumb">
-            {items.map((item, index) => {
-              const isLast = index === items.length - 1;
+      <nav aria-label="Breadcrumb">
+        <ol className="flex items-center gap-1.5 whitespace-nowrap">
+          {items.map((item, index) => {
+            const isLast = index === items.length - 1;
 
-              return (
-                <li key={index} className="flex items-center">
-                  {item.to && !isLast ? (
-                    <Link
-                      to={item.to}
-                      className="opacity-80 text-sm text-muted-foreground leading-none hover:underline"
-                    >
-                      {item.title}
-                    </Link>
-                  ) : (
-                    <span
-                      className="text-sm text-muted-foreground leading-none"
-                      aria-current={isLast ? 'page' : undefined}
-                    >
-                      {item.title}
-                    </span>
-                  )}
+            return (
+              <li key={index} className="flex items-center gap-1.5 text-sm light-text-navy">
+                {item.to && !isLast ? (
+                  <Link to={item.to} className="hover:opacity-80">
+                    {item.title}
+                  </Link>
+                ) : (
+                  <span aria-current={isLast ? 'page' : undefined}>{item.title}</span>
+                )}
 
-                  {!isLast && (
-                    <span className="mx-2.5 p-0.5 rounded-full bg-muted-foreground" />
-                  )}
-                </li>
-              );
-            })}
-          </ol>
-        </div>
-
-        <div className="col-span-2 flex justify-center -mb-7 max-h-[120px] max-w-[140px]">
-          <div className="hidden sm:block absolute right-7 bottom-0">
-            <img src={breadcrumbBg} alt="support-img" width={145} height={95} />
-          </div>
-        </div>
-      </div>
-    </CardBox>
+                {!isLast && (
+                  <svg
+                    className="stroke-current"
+                    width="17"
+                    height="16"
+                    viewBox="0 0 17 16"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M6.0765 12.667L10.2432 8.50033L6.0765 4.33366"
+                      strokeWidth="1.2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                )}
+              </li>
+            );
+          })}
+        </ol>
+      </nav>
+    </div>
   );
 };
 

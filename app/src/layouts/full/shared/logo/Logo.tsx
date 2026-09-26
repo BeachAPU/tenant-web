@@ -1,13 +1,12 @@
-
-import { Link } from 'react-router'
-import LogoIcon from 'src/assets/images/logos/logo-icon.svg'
+import { Link } from 'react-router';
+import { LogoMark } from './FullLogo';
 
 const Logo = () => {
-    return (
-        <Link to={'/'}>
-            <img src={LogoIcon} alt="logo" />
-        </Link>
-    )
-}
+  return (
+    <Link to={'/'}>
+      <LogoMark width={32} height={29} className="text-[#153CAA] dark:text-white" />
+    </Link>
+  );
+};
 
-export default Logo
+export default Logo;

@@ -1,0 +1,207 @@
+{
+  "common": {
+    "email": "E-mail cím",
+    "password": "Jelszó",
+    "save": "Mentés",
+    "cancel": "Mégse",
+    "loading": "Betöltés…",
+    "active": "Aktív",
+    "inactive": "Inaktív",
+    "goBackHome": "Vissza a főoldalra",
+    "backToLogin": "Vissza a bejelentkezéshez",
+    "delete": "Törlés"
+  },
+  "nav": {
+    "home": "Kezdőlap",
+    "account": "Fiók",
+    "userProfile": "Felhasználói profil",
+    "settings": "Beállítások",
+    "myIssues": "Bejelentéseim",
+    "myHome": "Otthonom"
+  },
+  "home": {
+    "welcomeTitle": "Üdvözöljük, {{name}}",
+    "welcomeSubtitle": "Íme a fiókja áttekintése.",
+    "profileCardDescription": "Tekintse meg fiókadatait és elérhetőségeit.",
+    "settingsCardDescription": "Kezelje a megjelenési és nyelvi beállításait.",
+    "issuesCardDescription": "Jelezzen hibát az épületben, és kövesse nyomon az állapotát."
+  },
+  "header": {
+    "logout": "Kijelentkezés",
+    "notifications": "Értesítések",
+    "searchPlaceholder": "Keresés....",
+    "myProfile": "Saját profil",
+    "theme": "Téma",
+    "language": "Nyelv",
+    "lightMode": "Világos mód",
+    "darkMode": "Sötét mód",
+    "toggleSidebar": "Oldalsáv be/ki",
+    "moreActions": "Továbbiak",
+    "close": "Bezárás",
+    "noNotifications": "Még nincsenek értesítések."
+  },
+  "auth": {
+    "login": {
+      "emailLabel": "E-mail cím",
+      "passwordLabel": "Jelszó",
+      "submit": "Bejelentkezés",
+      "submitting": "Bejelentkezés...",
+      "forgotPasswordLink": "Elfelejtette jelszavát?",
+      "title": "Bejelentkezés",
+      "subtitle": "Adja meg e-mail címét és jelszavát a bejelentkezéshez!",
+      "emailPlaceholder": "info@gmail.com",
+      "passwordPlaceholder": "Adja meg jelszavát",
+      "keepLoggedIn": "Maradjak bejelentkezve"
+    },
+    "forgotPassword": {
+      "title": "Elfelejtette jelszavát?",
+      "subtitle": "Adja meg fiókja e-mail címét, és küldünk egy linket a jelszó visszaállításához.",
+      "emailLabel": "E-mail cím",
+      "submit": "Link küldése",
+      "submitting": "Küldés...",
+      "successMessage": "Ha létezik fiók ehhez az e-mail címhez, hamarosan megérkezik a visszaállító link.",
+      "backToLogin": "Vissza a bejelentkezéshez"
+    },
+    "resetPassword": {
+      "title": "Új jelszó megadása",
+      "subtitle": "Adjon meg egy új jelszót a fiókjához.",
+      "passwordLabel": "Új jelszó",
+      "confirmPasswordLabel": "Új jelszó megerősítése",
+      "submit": "Jelszó visszaállítása",
+      "submitting": "Visszaállítás...",
+      "successMessage": "Jelszava visszaállítva. Most már bejelentkezhet.",
+      "invalidToken": "Ez a visszaállító link érvénytelen vagy lejárt. Kérjen egy újat.",
+      "passwordMismatch": "A jelszavak nem egyeznek.",
+      "genericError": "Hiba történt. Kérjük, próbálja újra.",
+      "backToLogin": "Vissza a bejelentkezéshez",
+      "subtitleWithEmail": "Adjon meg új jelszót a(z) {{email}} fiókhoz.",
+      "requirementsHint": "Legalább 8 karakter, kis- és nagybetű, szám és speciális karakter."
+    }
+  },
+  "profile": {
+    "title": "Felhasználói profil",
+    "breadcrumbHome": "Főoldal",
+    "accountDetails": "Fiók adatai",
+    "firstName": "Keresztnév",
+    "lastName": "Vezetéknév",
+    "email": "E-mail cím",
+    "role": "Szerepkör",
+    "locale": "Nyelvi beállítás",
+    "environment": "Környezet",
+    "memberSince": "Tagság kezdete",
+    "lastUpdated": "Utoljára frissítve"
+  },
+  "settings": {
+    "title": "Beállítások",
+    "breadcrumbHome": "Főoldal",
+    "appearanceTitle": "Megjelenés",
+    "appearanceSubtitle": "Válassza ki, hogyan nézzen ki a felület ezen az eszközön.",
+    "themeLight": "Világos",
+    "themeDark": "Sötét",
+    "themeSystem": "Rendszer",
+    "languageTitle": "Nyelv",
+    "languageSubtitle": "Válassza ki az alkalmazásban használt nyelvet.",
+    "languageEnglish": "Angol",
+    "languageHungarian": "Magyar",
+    "accountTitle": "Fiók",
+    "email": "E-mail cím",
+    "role": "Szerepkör",
+    "locale": "Nyelvi beállítás",
+    "environment": "Környezet"
+  },
+  "issues": {
+    "listTitle": "Bejelentéseim",
+    "breadcrumbHome": "Főoldal",
+    "newIssueButton": "Új bejelentés",
+    "emptyState": "Még nem küldött be bejelentést.",
+    "loadError": "Nem sikerült betölteni a bejelentéseket. Kérjük, próbálja újra.",
+    "table": {
+      "title": "Cím",
+      "building": "Épület",
+      "apartment": "Lakás",
+      "status": "Állapot",
+      "priority": "Prioritás",
+      "category": "Kategória",
+      "createdAt": "Bejelentve",
+      "buildingWide": "Egész épületre vonatkozik"
+    },
+    "filters": {
+      "statusLabel": "Állapot",
+      "statusAll": "Összes állapot"
+    },
+    "pagination": {
+      "previous": "Előző",
+      "next": "Következő",
+      "pageInfo": "{{current}}. / {{total}} oldal"
+    },
+    "create": {
+      "title": "Hiba bejelentése",
+      "subtitle": "Mondja el, mi történt és hol - a személyzet onnantól átveszi.",
+      "buildingLabel": "Épület",
+      "buildingPlaceholder": "Keresse meg az épületét…",
+      "buildingSearchEmpty": "Nincs találat.",
+      "apartmentLabel": "Lakás",
+      "apartmentPlaceholder": "Keresse meg a lakását…",
+      "apartmentSearchEmpty": "Nincs találat.",
+      "apartmentSelected": "{{doorNumber}}. lakás",
+      "apartmentHelp": "Hagyja üresen, ha a bejelentés az egész épületre vonatkozik.",
+      "skipApartment": "Ez az egész épületet érinti",
+      "categoryLabel": "Kategória",
+      "categoryPlaceholder": "Válasszon kategóriát",
+      "priorityLabel": "Prioritás",
+      "priorityPlaceholder": "Válasszon prioritást",
+      "titleLabel": "Cím",
+      "titlePlaceholder": "A probléma rövid összefoglalása",
+      "descriptionLabel": "Leírás",
+      "descriptionPlaceholder": "Adjon meg további részleteket, ha van",
+      "submit": "Bejelentés küldése",
+      "submitting": "Küldés…",
+      "successMessage": "A bejelentését rögzítettük.",
+      "genericError": "Hiba történt. Kérjük, próbálja újra.",
+      "backToList": "Vissza a bejelentéseimhez"
+    },
+    "detail": {
+      "reportedBy": "Bejelentette",
+      "reportedOn": "Bejelentve",
+      "building": "Épület",
+      "apartment": "Lakás",
+      "buildingWideNotice": "Ez a bejelentés az egész épületet érinti",
+      "category": "Kategória",
+      "priority": "Prioritás",
+      "status": "Állapot",
+      "description": "Leírás",
+      "noDescription": "Nincs megadva leírás.",
+      "tabDetails": "Részletek",
+      "tabNotes": "Üzenetek",
+      "tabHistory": "Előzmények",
+      "notesEmpty": "Még nincs üzenet.",
+      "noteBodyPlaceholder": "Írjon választ…",
+      "postNote": "Válasz küldése",
+      "posting": "Küldés…",
+      "noteError": "Nem sikerült elküldeni a választ. Kérjük, próbálja újra.",
+      "historyEmpty": "Még nincs rögzített változás.",
+      "historyEntry": "{{field}} mezőnél változás: {{oldValue}} → {{newValue}}",
+      "confirmCloseButton": "Megoldva, lezárás",
+      "confirmCloseDialogTitle": "Megerősíti, hogy a probléma megoldódott?",
+      "confirmCloseDialogBody": "Ez lezárja a bejelentést. Később szükség esetén újra megnyithatja.",
+      "reopenButton": "Nem megoldott / Újranyitás",
+      "reopenDialogTitle": "Újranyitja ezt a bejelentést?",
+      "reopenDialogBody": "Ezzel visszaküldi a bejelentést a személyzetnek további vizsgálatra.",
+      "actionPendingNotice": "A személyzet dolgozik a bejelentésen.",
+      "updateError": "Nem sikerült frissíteni a bejelentést. Kérjük, próbálja újra.",
+      "loadError": "Nem sikerült betölteni a bejelentést. Kérjük, próbálja újra.",
+      "notFound": "Ez a bejelentés nem található."
+    },
+    "allIssues": "Összes bejelentés"
+  },
+  "errors": {
+    "notFound": {
+      "title": "Hoppá!",
+      "message": "A keresett oldal nem található."
+    },
+    "maintenance": {
+      "title": "Karbantartás!",
+      "message": "Az oldal karbantartás alatt áll. Kérjük, nézzen vissza később!"
+    }
+  }
+}

@@ -1,6 +1,8 @@
 import { RouterProvider } from 'react-router';
 import router from './routes/Router';
 import './css/globals.css';
+import './css/theme/light-theme.css';
+import './css/theme/dark-theme.css';
 import { ThemeProvider } from './components/provider/theme-provider';
 import { AuthProvider } from './context/auth-context';
 

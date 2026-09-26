@@ -1,164 +1,84 @@
-import { useState, useEffect, useEffectEvent } from 'react';
-import { Icon } from '@iconify/react';
-import Messages from './Messages';
-import FullLogo from '../../shared/logo/FullLogo';
-import Profile from './Profile';
-import SidebarLayout from '../sidebar/Sidebar';
-import { useTheme } from 'src/components/provider/theme-provider';
-
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { CloseIcon, MoreDotIcon } from 'src/icons';
+import { MenuIcon } from 'src/components/shared/AdminInlineIcons';
 import { Sheet, SheetContent, SheetTitle } from 'src/components/ui/sheet';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
+import { useSidebarState } from '../../SidebarState';
+import SidebarLayout from '../sidebar/Sidebar';
+import Logo from '../../shared/logo/Logo';
+import Messages from './Messages';
+import Profile from './Profile';
 import Search from './Search';
 
+// The fixed sidebar shows from xl (DESIGN.md §4.1); below that the toggle
+// opens it as a drawer instead of collapsing it.
+const SIDEBAR_FIXED_FROM = 1280;
+
+// DESIGN.md §9.1: toggle on the left (+ this app's search box), notifications
+// and the user menu on the right, nothing else. Below lg the right side moves
+// to a second row behind the More button, and the logo mark sits centred.
 const Header = () => {
-  const { theme, setTheme } = useTheme();
-  const [isSticky, setIsSticky] = useState(false);
-  const [mobileMenu, setMobileMenu] = useState('');
-  const [isOpen, setIsOpen] = useState(false);
+  const { t } = useTranslation();
+  const { toggleCollapsed, mobileOpen, setMobileOpen } = useSidebarState();
+  const [actionsOpen, setActionsOpen] = useState(false);
 
-  const handleScroll = useEffectEvent(() => {
-    if (window.scrollY > 50) {
-      setIsSticky(true);
-    } else {
-      setIsSticky(false);
-    }
-  });
-
-  const handleResize = useEffectEvent(() => {
-    if (window.innerWidth > 1023) {
-      setIsOpen(false);
-    }
-  });
-
-  useEffect(() => {
-    // Use stable callbacks inside the effect
-    window.addEventListener('scroll', handleScroll);
-    window.addEventListener('resize', handleResize);
-
-    // Run once on mount
-    handleResize();
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
-  const toggleMode = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light');
-  };
-
-  const handleMobileMenu = () => {
-    if (mobileMenu === 'active') {
-      setMobileMenu('');
-    } else {
-      setMobileMenu('active');
-    }
+  const handleToggle = () => {
+    if (window.innerWidth >= SIDEBAR_FIXED_FROM) toggleCollapsed();
+    else setMobileOpen(!mobileOpen);
   };
 
   return (
     <>
-      <header
-        className={`sticky top-0 z-[2] ${
-          isSticky ? 'bg-white dark:bg-dark shadow-md fixed w-full' : 'bg-transparent'
-        }`}
-      >
-        <nav className="rounded-none bg-transparent dark:bg-transparent py-4 px-6 !max-w-full flex justify-between items-center">
-          {/* Mobile Toggle Icon */}
-          <span
-            onClick={() => setIsOpen(true)}
-            className="px-[15px] hover:text-primary dark:hover:text-primary text-foreground dark:text-muted-foreground relative after:absolute after:w-10 after:h-10 after:rounded-full hover:after:bg-lightprimary  after:bg-transparent rounded-full xl:hidden flex justify-center items-center cursor-pointer"
+      <header className="light-header sticky top-0 z-[2] flex w-full lg:border-b">
+        <div className="flex grow flex-col items-center justify-between lg:flex-row lg:px-6">
+          <div className="flex w-full items-center justify-between gap-2 light-header-line border-b px-3 py-3 sm:gap-4 lg:justify-normal lg:border-b-0 lg:px-0 lg:py-4">
+            <button
+              type="button"
+              onClick={handleToggle}
+              aria-label={t('header.toggleSidebar')}
+              className="light-text-navy flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center light-header-line rounded-lg lg:h-11 lg:w-11 lg:border"
+            >
+              {mobileOpen ? <CloseIcon className="size-6" /> : <MenuIcon width={16} height={12} />}
+            </button>
+
+            <div className="hidden lg:block">
+              <Search />
+            </div>
+
+            <div className="lg:hidden">
+              <Logo />
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setActionsOpen((o) => !o)}
+              aria-label={t('header.moreActions')}
+              aria-expanded={actionsOpen}
+              className="light-text-navy flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 lg:hidden"
+            >
+              <MoreDotIcon className="size-6 rotate-90 fill-current" />
+            </button>
+          </div>
+
+          <div
+            className={`${
+              actionsOpen ? 'flex' : 'hidden'
+            } w-full items-center justify-between gap-4 px-5 py-4 shadow-md lg:flex lg:justify-end lg:px-0 lg:shadow-none`}
           >
-            <Icon icon="tabler:menu-2" height={20} />
-          </span>
-
-          <div className="hidden xl:flex items-center gap-2">
-            <Search />
+            <Messages />
+            <Profile />
           </div>
-
-          {/* mobile-logo */}
-          <div className="block xl:hidden">
-            <FullLogo />
-          </div>
-
-          <div className="xl:!block !hidden md:!hidden">
-            <div className="flex gap-0 items-center">
-              {/* Theme Toggle */}
-              {theme === 'light' ? (
-                <div
-                  className="hover:text-primary px-15 group dark:hover:text-primary focus:ring-0 rounded-full flex justify-center items-center cursor-pointer text-foreground dark:text-muted-foreground relative"
-                  onClick={toggleMode}
-                >
-                  <span className="flex items-center justify-center relative after:absolute after:w-10 after:h-10 after:rounded-full after:-top-1/2 group-hover:after:bg-lightprimary">
-                    <Icon icon="tabler:moon" width="20" />
-                  </span>
-                </div>
-              ) : (
-                // Dark Mode Button
-                <div
-                  className="hover:text-primary px-15 dark:hover:text-primary focus:ring-0 rounded-full flex justify-center items-center cursor-pointer text-foreground dark:text-muted-foreground group relative"
-                  onClick={toggleMode}
-                >
-                  <span className="flex items-center justify-center relative after:absolute after:w-10 after:h-10 after:rounded-full after:-top-1/2 group-hover:after:bg-lightprimary">
-                    <Icon
-                      icon="solar:sun-bold-duotone"
-                      width="20"
-                      className="group-hover:text-primary"
-                    />
-                  </span>
-                </div>
-              )}
-
-              {/* Messages Dropdown */}
-              <Messages />
-
-              {/* Profile Dropdown */}
-              <Profile />
-            </div>
-          </div>
-          {/* Mobile Toggle Icon */}
-          <span className="flex xl:hidden " onClick={handleMobileMenu}>
-            <div className="xl:hidden flex w-full">
-              <div className="flex justify-center items-center">
-                {theme === 'light' ? (
-                  <div
-                    className="hover:text-primary px-1 sm:px-15 group  dark:hover:text-primary focus:ring-0 rounded-full flex justify-center items-center cursor-pointer text-foreground dark:text-muted-foreground relative"
-                    onClick={toggleMode}
-                  >
-                    <span className="flex items-center justify-center relative after:absolute after:w-10 after:h-10 after:rounded-full after:-top-1/2 group-hover:after:bg-lightprimary">
-                      <Icon icon="tabler:moon" width="20" />
-                    </span>
-                  </div>
-                ) : (
-                  // Dark Mode Button
-                  <div
-                    className="hover:text-primary px-1 sm:px-15 dark:hover:text-primary focus:ring-0 rounded-full flex justify-center items-center cursor-pointer text-foreground dark:text-muted-foreground group relative"
-                    onClick={toggleMode}
-                  >
-                    <span className="flex items-center justify-center relative after:absolute after:w-10 after:h-10 after:rounded-full after:-top-1/2 group-hover:after:bg-lightprimary">
-                      <Icon
-                        icon="solar:sun-bold-duotone"
-                        width="20"
-                        className="group-hover:text-primary"
-                      />
-                    </span>
-                  </div>
-                )}
-                <Messages />
-                <Profile />
-              </div>
-            </div>
-          </span>
-        </nav>
+        </div>
       </header>
 
-      {/* Mobile Sidebar */}
-      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+      {/* Drawer sidebar below xl */}
+      <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
         <SheetContent side="left" className="w-64 p-0">
           <VisuallyHidden>
             <SheetTitle>sidebar</SheetTitle>
           </VisuallyHidden>
-          <SidebarLayout onClose={() => setIsOpen(false)} />
+          <SidebarLayout onClose={() => setMobileOpen(false)} />
         </SheetContent>
       </Sheet>
     </>

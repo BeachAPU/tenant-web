@@ -12,7 +12,7 @@ const TabsList = React.forwardRef<
   <TabsPrimitive.List
     ref={ref}
     className={cn(
-      'inline-flex items-center justify-center rounded-md gap-3 bg-background dark:bg-white/5 p-1 text-ld',
+      'inline-flex flex-wrap items-center gap-2',
       className,
     )}
     {...props}
@@ -27,7 +27,9 @@ const TabsTrigger = React.forwardRef<
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
-      'inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-primary dark:data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-sm bg-hover',
+      // DESIGN.md §5 pill tabs. The active pill comes from `.light-tab[data-state=active]`
+      // in css/theme (add `light-tab-danger` for the Emergency tab).
+      'light-tab inline-flex items-center justify-center gap-2 whitespace-nowrap px-4 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50',
       className,
     )}
     {...props}

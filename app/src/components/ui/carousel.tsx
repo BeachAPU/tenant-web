@@ -2,7 +2,7 @@ import * as React from "react"
 import useEmblaCarousel, {
   type UseEmblaCarouselType,
 } from "embla-carousel-react"
-import { ArrowLeft, ArrowRight } from "lucide-react"
+import { AngleLeftIcon, AngleRightIcon } from "src/icons"
 
 import { cn } from "src/lib/utils"
 import { Button } from "src/components/ui/button"
@@ -193,7 +193,7 @@ function CarouselPrevious({
       onClick={scrollPrev}
       {...props}
     >
-      <ArrowLeft />
+      <AngleLeftIcon className="size-5 [&_path]:stroke-current" />
       <span className="sr-only">Previous slide</span>
     </Button>
   )
@@ -223,7 +223,7 @@ function CarouselNext({
       onClick={scrollNext}
       {...props}
     >
-      <ArrowRight />
+      <AngleRightIcon className="size-5 [&_path]:stroke-current" />
       <span className="sr-only">Next slide</span>
     </Button>
   )

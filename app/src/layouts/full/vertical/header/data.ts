@@ -232,33 +232,4 @@ const Notification: NotificationType[] = [
   },
 ];
 
-//  Profile Data
-interface ProfileType {
-  title: string;
-  img: string;
-  subtitle: string;
-  url: string;
-  icon: string
-}
-
-import acccountIcon from 'src/assets/images/svgs/icon-account.svg';
-import taskIcon from 'src/assets/images/svgs/icon-tasks.svg';
-
-const profileDD: ProfileType[] = [
-  {
-    img: acccountIcon,
-    title: 'My Profile',
-    subtitle: 'Account settings',
-    icon: "tabler:user",
-    url: '/user-profile',
-  },
-  {
-    img: taskIcon,
-    title: 'Settings',
-    subtitle: 'Appearance and account basics',
-    icon: "tabler:settings",
-    url: '/settings',
-  },
-];
-
-export { appsLink, pageLinks, SearchLinks, MessagesLink, Notification, profileDD };
+export { appsLink, pageLinks, SearchLinks, MessagesLink, Notification };

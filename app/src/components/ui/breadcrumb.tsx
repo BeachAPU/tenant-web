@@ -1,6 +1,6 @@
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
-import { ChevronRight, MoreHorizontal } from "lucide-react"
+import { AngleRightIcon, HorizontaLDots } from "src/icons"
 
 import { cn } from "src/lib/utils"
 
@@ -75,7 +75,7 @@ function BreadcrumbSeparator({
       className={cn("[&>svg]:size-3.5", className)}
       {...props}
     >
-      {children ?? <ChevronRight />}
+      {children ?? <AngleRightIcon className="size-4 [&_path]:stroke-current" />}
     </li>
   )
 }
@@ -92,7 +92,7 @@ function BreadcrumbEllipsis({
       className={cn("flex size-9 items-center justify-center", className)}
       {...props}
     >
-      <MoreHorizontal className="size-4" />
+      <HorizontaLDots className="size-4 fill-current" />
       <span className="sr-only">More</span>
     </span>
   )

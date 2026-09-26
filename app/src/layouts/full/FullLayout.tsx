@@ -2,17 +2,20 @@ import { FC } from 'react';
 import { Outlet } from 'react-router';
 import Sidebar from './vertical/sidebar/Sidebar';
 import Header from './vertical/header/Header';
+import { SidebarStateProvider, useSidebarState } from './SidebarState';
 
-const FullLayout: FC = () => {
+const Shell = () => {
+  const { isRail } = useSidebarState();
+
   return (
     <>
       <div className="flex w-full min-h-screen">
-        <div className="page-wrapper flex w-full ">
+        <div className={`page-wrapper flex w-full ${isRail ? 'page-wrapper-rail' : ''}`}>
           {/* Header/sidebar */}
           <div className="xl:block hidden">
             <Sidebar />
           </div>
-          <div className="body-wrapper w-full bg-white dark:bg-dark">
+          <div className="body-wrapper w-full bg-background dark:bg-transparent">
             {/* Top Header  */}
             <Header />
 
@@ -28,5 +31,11 @@ const FullLayout: FC = () => {
     </>
   );
 };
+
+const FullLayout: FC = () => (
+  <SidebarStateProvider>
+    <Shell />
+  </SidebarStateProvider>
+);
 
 export default FullLayout;

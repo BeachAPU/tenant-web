@@ -51,5 +51,10 @@ export default defineConfig({
             '/api': `http://localhost:${process.env.PORT || 3000}`,
         },
     },
-    plugins: [svgr(), react()],
+    plugins: [
+        // Same options as admin-ui's vite-plugin-svgr: `import { ReactComponent as X } from './x.svg'`
+        // for src/icons (DESIGN.md §12), while the default export stays the file URL for <img src>.
+        svgr({ icon: true, exportType: 'named', namedExport: 'ReactComponent' }),
+        react(),
+    ],
 });

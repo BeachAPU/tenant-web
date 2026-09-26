@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
-import { X } from 'lucide-react';
+import { CloseIcon } from 'src/icons';
 
 import { cn } from 'src/lib/utils';
 
@@ -36,7 +36,7 @@ const DialogContent = React.forwardRef<
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
-        'fixed left-1/2 top-1/2 z-50 grid w-full max-w-lg -translate-x-1/2 -translate-y-1/2 gap-4 bg-white dark:bg-dark p-6 shadow-lg duration-200 rounded-lg',
+        'fixed left-1/2 top-1/2 z-50 grid w-full max-w-lg -translate-x-1/2 -translate-y-1/2 gap-4 light-modal p-6 shadow-lg duration-200 rounded-3xl',
         'data-[state=open]:animate-in data-[state=closed]:animate-out',
         'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
         'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
@@ -46,8 +46,8 @@ const DialogContent = React.forwardRef<
       {...props}
     >
       {children}
-      <DialogPrimitive.Close className="absolute right-3 top-2  bg-transparent hover:bg-lightprimary dark:hover:bg-darkprimary hover:text-primary p-1 rounded-full hover:cursor-pointer">
-        <X className="h-5 w-5 " />
+      <DialogPrimitive.Close className="absolute right-3 top-2  bg-transparent hover:bg-black/5 dark:hover:bg-white/10 light-text-navy p-1 rounded-full hover:cursor-pointer">
+        <CloseIcon className="size-6" />
         <span className="sr-only">Close</span>
       </DialogPrimitive.Close>
     </DialogPrimitive.Content>
@@ -57,14 +57,14 @@ DialogContent.displayName = DialogPrimitive.Content.displayName;
 
 const DialogHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
-    className={cn('flex flex-col space-y-1.5  font-semibold tracking-tight text-xl', className)}
+    className={cn('flex flex-col space-y-1.5 pr-6', className)}
     {...props}
   />
 );
 DialogHeader.displayName = 'DialogHeader';
 
 const DialogFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn('flex  sm:justify-end space-x-2 mt-3', className)} {...props} />
+  <div className={cn('flex justify-end gap-3 mt-3', className)} {...props} />
 );
 DialogFooter.displayName = 'DialogFooter';
 
@@ -74,7 +74,7 @@ const DialogTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Title
     ref={ref}
-    className={cn('text-lg font-semibold leading-none tracking-tight', className)}
+    className={cn('text-xl font-semibold leading-tight light-text-navy', className)}
     {...props}
   />
 ));

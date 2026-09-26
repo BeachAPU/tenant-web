@@ -7,7 +7,7 @@ interface MyAppProps {
 }
 const CardBox: React.FC<MyAppProps> = ({ children, className }) => {
   return (
-    <Card className={`card no-inset no-ring ${className} shadow-none border border-ld rounded-lg w-full`}>
+    <Card className={`light-panel-inner card no-inset no-ring ${className} shadow-none border border-gray-200 dark:border-white/10 rounded-2xl w-full`}>
       {children}
     </Card>
   );

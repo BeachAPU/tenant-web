@@ -2,6 +2,12 @@
     margin-left: calc(0px + 270px);
     transition: .2s ease-in;
 }
+/* Header toggle collapsed the sidebar to its 90px icon rail (SidebarState.tsx). */
+@media screen and (min-width:1280px) {
+    .page-wrapper.page-wrapper-rail {
+        margin-left: 90px;
+    }
+}
 .rounded-bars .apexcharts-bar-series.apexcharts-plot-series .apexcharts-series path {
     clip-path: inset(0 0 5% 0 round 20px);
   }

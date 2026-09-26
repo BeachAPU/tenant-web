@@ -1,5 +1,4 @@
 @import 'tailwindcss';
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
 @import './app.css';
 
 @import './layouts/container.css' layer(utilities);
@@ -15,8 +14,13 @@ main {
   scroll-behavior: smooth;
 }
 
+/* App font, shared by every UI (see .helpers/DESIGN.md §2). */
+:root {
+  --app-font: Arial, "Liberation Sans", Helvetica, sans-serif;
+}
+
 body {
-  font-family: 'DM Sans', sans-serif;
+  font-family: var(--app-font);
 }
 
 @theme {
@@ -104,24 +108,24 @@ body {
 
 :root {
   --radius: 10px;
-  --background: var(--white);
+  --background: #f9fafb;
   --foreground: var(--dark);
   --card: var(--white);
-  --card-foreground: var(--link);
+  --card-foreground: var(--dark);
   --popover: var(--white);
-  --popover-foreground: var(--link);
-  --primary: #5d87ff;
+  --popover-foreground: var(--dark);
+  --primary: #153caa;
   --primary-foreground: var(--white);
   --secondary: #49beff;
   --secondary-foreground: var(--white);
-  --muted: #f5f5f5;
-  --muted-foreground: #5a6a85bf;
+  --muted: #f6f6f6;
+  --muted-foreground: rgba(9, 19, 48, 0.6);
   --accent: var(--lightprimary);
   --accent-foreground: var(--primary);
   --destructive: var(--error);
   --destructive-foreground: var(--white);
-  --border: #dfe5ef;
-  --input: #e5e7eb;
+  --border: #e5e7eb;
+  --input: rgba(9, 19, 48, 0.25);
   --ring: var(--lightprimary);
   --chart-1: var(--primary);
   --chart-2: var(--secondary);
@@ -129,7 +133,7 @@ body {
   --chart-4: var(--warning);
   --chart-5: var(--error);
   --sidebar: var(--white);
-  --sidebar-foreground: #2a3547;
+  --sidebar-foreground: var(--dark);
   --sidebar-primary: var(--primary);
   --sidebar-primary-foreground: var(--white);
   --sidebar-accent: var(--lightprimary);
@@ -139,12 +143,12 @@ body {
 
   /* CUSTOM COLORS */
   --info: #8754ec;
-  --success: #13deb9;
+  --success: #13bf7d;
   --warning: #f6b51e;
-  --error: #ef4444;
+  --error: #d52b2e;
   --white: #ffffff;
-  --dark: #1c2536;
-  --bodytext: #5a6a85bf;
+  --dark: #091330;
+  --bodytext: rgba(9, 19, 48, 0.6);
 
   /* Light Variants */
   --lightprimary: color-mix(in oklab, var(--primary) 12%, transparent);
@@ -164,46 +168,46 @@ body {
 }
 
 .dark {
-  --background: var(--dark);
+  --background: #081844;
   --foreground: var(--white);
-  --card: var(--dark);
+  --card: #091330;
   --card-foreground: var(--white);
-  --popover: #333f55;
+  --popover: #091330;
   --popover-foreground: var(--white);
-  --primary: #5d87ff;
+  --primary: #153caa;
   --primary-foreground: var(--white);
   --secondary: #49beff;
   --secondary-foreground: var(--white);
-  --muted: #2a3851;
-  --muted-foreground: #7c8fac;
-  --accent: var(--accent);
-  --accent-foreground: var(--accent-foreground);
+  --muted: rgba(8, 24, 68, 0.5);
+  --muted-foreground: rgba(255, 255, 255, 0.6);
+  --accent: rgba(255, 255, 255, 0.08);
+  --accent-foreground: var(--white);
   --destructive: var(--error);
-  --border: #333f55;
-  --input: var(--border);
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.25);
   --ring: var(--lightprimary);
   --chart-1: var(--primary);
   --chart-2: var(--secondary);
   --chart-3: var(--success);
   --chart-4: var(--warning);
   --chart-5: var(--error);
-  --sidebar: var(--dark);
-  --sidebar-foreground: #7c8fac;
-  --sidebar-primary: var(--sidebar-primary);
-  --sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --sidebar-accent: var(--sidebar-accent);
-  --sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --sidebar-border: var(--sidebar-border);
-  --sidebar-ring: var(--sidebar-ring);
+  --sidebar: transparent;
+  --sidebar-foreground: var(--white);
+  --sidebar-primary: #dddddd;
+  --sidebar-primary-foreground: #081844;
+  --sidebar-accent: rgba(255, 255, 255, 0.08);
+  --sidebar-accent-foreground: var(--white);
+  --sidebar-border: rgba(255, 255, 255, 0.1);
+  --sidebar-ring: #a1a1a1;
 
   /* CUSTOM COLORS */
   --info: #8754ec;
-  --success: #13deb9;
+  --success: #13bf7d;
   --warning: #f6b51e;
-  --error: #ef4444;
+  --error: #d52b2e;
   --white: #ffffff;
-  --dark: #1c2536;
-  --bodytext: #5a6a85bf;
+  --dark: #091330;
+  --bodytext: rgba(255, 255, 255, 0.6);
 
   /* Light Variants */
   --lightprimary: color-mix(in oklab, var(--primary) 20%, transparent);
