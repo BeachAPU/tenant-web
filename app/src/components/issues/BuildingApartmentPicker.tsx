@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronDownIcon } from 'src/icons';
 import { Button } from 'src/components/ui/button';
@@ -11,81 +11,56 @@ import {
   CommandItem,
   CommandList,
 } from 'src/components/ui/command';
-import { useDebouncedValue } from 'src/hooks/useDebouncedValue';
-import type { ApartmentSummary, BuildingSummary } from 'src/types/ticket';
+import { useApiGet } from 'src/hooks/useApiGet';
+import type { MyApartment, ResidentBuilding } from 'src/types/resident';
 
-async function fetchBuildings(query: string): Promise<BuildingSummary[]> {
-  const res = await fetch(`/api/tenant/buildings?q=${encodeURIComponent(query)}`);
-  if (!res.ok) return [];
-  const body = await res.json();
-  return (body.data ?? []) as BuildingSummary[];
-}
+const matches = (value: string | null | undefined, query: string) =>
+  (value ?? '').toLowerCase().includes(query);
 
-async function fetchApartments(buildingId: number, query: string): Promise<ApartmentSummary[]> {
-  const res = await fetch(
-    `/api/tenant/buildings/${buildingId}/apartments?q=${encodeURIComponent(query)}`,
-  );
-  if (!res.ok) return [];
-  const body = await res.json();
-  return (body.data ?? []) as ApartmentSummary[];
-}
-
+// Buildings come from the footprint-scoped `/resident/buildings` (the staff
+// `/tenant/buildings*` endpoints are 403 for residents). Each building
+// already carries the caller's own `my_apartments`, so there's no separate
+// apartments request, and since that endpoint has no `?q=` and a resident
+// only has a handful of buildings, both lists are filtered client-side.
 const BuildingApartmentPicker = ({
   building,
   apartment,
   onBuildingChange,
   onApartmentChange,
 }: {
-  building: BuildingSummary | null;
-  apartment: ApartmentSummary | null;
-  onBuildingChange: (building: BuildingSummary | null) => void;
-  onApartmentChange: (apartment: ApartmentSummary | null) => void;
+  building: ResidentBuilding | null;
+  apartment: MyApartment | null;
+  onBuildingChange: (building: ResidentBuilding | null) => void;
+  onApartmentChange: (apartment: MyApartment | null) => void;
 }) => {
   const { t } = useTranslation();
+  const { data, loading: buildingLoading } = useApiGet<{ data: ResidentBuilding[] }>(
+    '/api/tenant/resident/buildings',
+  );
 
   const [buildingOpen, setBuildingOpen] = useState(false);
   const [buildingSearch, setBuildingSearch] = useState('');
-  const debouncedBuildingSearch = useDebouncedValue(buildingSearch, 300);
-  const [buildingResults, setBuildingResults] = useState<BuildingSummary[]>([]);
-  const [buildingLoading, setBuildingLoading] = useState(false);
 
   const [apartmentOpen, setApartmentOpen] = useState(false);
   const [apartmentSearch, setApartmentSearch] = useState('');
-  const debouncedApartmentSearch = useDebouncedValue(apartmentSearch, 300);
-  const [apartmentResults, setApartmentResults] = useState<ApartmentSummary[]>([]);
-  const [apartmentLoading, setApartmentLoading] = useState(false);
 
-  useEffect(() => {
-    if (!buildingOpen) return;
-    let cancelled = false;
-    setBuildingLoading(true);
-    fetchBuildings(debouncedBuildingSearch).then((results) => {
-      if (!cancelled) {
-        setBuildingResults(results);
-        setBuildingLoading(false);
-      }
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, [debouncedBuildingSearch, buildingOpen]);
+  const buildingResults = useMemo(() => {
+    const query = buildingSearch.trim().toLowerCase();
+    return (data?.data ?? []).filter(
+      (b) =>
+        !query ||
+        matches(b.name, query) ||
+        matches(`${b.street} ${b.housenumber}`, query) ||
+        matches(b.city_name, query),
+    );
+  }, [data, buildingSearch]);
 
-  useEffect(() => {
-    if (!apartmentOpen || !building) return;
-    let cancelled = false;
-    setApartmentLoading(true);
-    fetchApartments(building.id, debouncedApartmentSearch).then((results) => {
-      if (!cancelled) {
-        setApartmentResults(results);
-        setApartmentLoading(false);
-      }
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, [debouncedApartmentSearch, apartmentOpen, building]);
+  const apartmentResults = useMemo(() => {
+    const query = apartmentSearch.trim().toLowerCase();
+    return (building?.my_apartments ?? []).filter((a) => !query || matches(a.door_number, query));
+  }, [building, apartmentSearch]);
 
-  const handleSelectBuilding = (selected: BuildingSummary) => {
+  const handleSelectBuilding = (selected: ResidentBuilding) => {
     onBuildingChange(selected);
     onApartmentChange(null);
     setApartmentSearch('');
@@ -166,7 +141,7 @@ const BuildingApartmentPicker = ({
                 placeholder={t('issues.create.apartmentPlaceholder')}
               />
               <CommandList>
-                {!apartmentLoading && apartmentResults.length === 0 && (
+                {apartmentResults.length === 0 && (
                   <CommandEmpty>{t('issues.create.apartmentSearchEmpty')}</CommandEmpty>
                 )}
                 {apartmentResults.map((result) => (

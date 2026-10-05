@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { Link, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import BreadcrumbComp from 'src/layouts/full/shared/breadcrumb/BreadcrumbComp';
 import ComponentCard from 'src/components/shared/ComponentCard';
@@ -8,9 +8,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from 'src/components/ui/tabs
 import Spinner from 'src/views/spinner/Spinner';
 import { formatDate } from 'src/lib/utils';
 import { useTickets } from 'src/context/tickets-context';
+import { useAuth } from 'src/context/auth-context';
 import IssueStatusBadge from 'src/components/issues/IssueStatusBadge';
 import IssuePriorityBadge from 'src/components/issues/IssuePriorityBadge';
-import IssueCloseReopenActions from 'src/components/issues/IssueCloseReopenActions';
+import ResolutionActions from 'src/components/issues/ResolutionActions';
 import TicketNoteThread from 'src/components/issues/TicketNoteThread';
 import StatusHistoryList from 'src/components/issues/StatusHistoryList';
 import type { Ticket, TicketNote, TicketStatusHistoryEntry } from 'src/types/ticket';
@@ -19,8 +20,16 @@ const IssueDetail = () => {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const ticketId = Number(id);
-  const { options, getTicket, updateTicketStatus, listNotes, addNote, getStatusHistory } =
-    useTickets();
+  const { user } = useAuth();
+  const {
+    options,
+    getTicket,
+    confirmTicket,
+    reopenTicket,
+    listNotes,
+    addNote,
+    getStatusHistory,
+  } = useTickets();
 
   const [ticket, setTicket] = useState<Ticket | null>(null);
   const [notes, setNotes] = useState<TicketNote[]>([]);
@@ -57,21 +66,35 @@ const IssueDetail = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ticketId]);
 
-  const handleAddNote = async (body: string) => {
-    const result = await addNote(ticketId, body);
+  const handleAddNote = async (body: string, photo: File | null) => {
+    const result = await addNote(ticketId, body, photo);
     if (result.ok) setNotes((current) => [...current, result.data]);
-    return result.ok ? { ok: true as const } : { ok: false as const, error: result.error };
-  };
-
-  const handleUpdateStatus = async (status: string) => {
-    const result = await updateTicketStatus(ticketId, status);
-    if (result.ok) setTicket(result.data);
     return result;
   };
 
+  // The workflow responses skip the reporter enrichment the show endpoint
+  // adds, so re-read the ticket (and its history, which gained a row).
+  const runWorkflow = (action: (id: number) => ReturnType<typeof confirmTicket>) => async () => {
+    const result = await action(ticketId);
+    if (result.ok) {
+      const [ticketResult, historyResult] = await Promise.all([
+        getTicket(ticketId),
+        getStatusHistory(ticketId),
+      ]);
+      if (ticketResult.ok) setTicket(ticketResult.data);
+      if (historyResult.ok) setHistory(historyResult.data);
+    }
+    return result;
+  };
+
+  const isIncident = ticket?.kind === 'incident';
+  const stage = ticket?.stage ?? options?.statuses.find((s) => s.key === ticket?.status)?.stage;
+
   const BCrumb = [
     { to: '/', title: t('issues.breadcrumbHome') },
-    { to: '/issues', title: t('nav.myIssues') },
+    isIncident
+      ? { to: '/incidents', title: t('nav.incidents') }
+      : { to: '/issues', title: t('nav.myIssues') },
     { title: ticket?.title ?? '' },
   ];
 
@@ -93,13 +116,12 @@ const IssueDetail = () => {
         className="mb-6"
         title={t('issues.detail.tabDetails')}
         headerAction={
-          options && (
-            <IssueCloseReopenActions
-              ticket={ticket}
-              statuses={options.statuses}
-              onUpdateStatus={handleUpdateStatus}
-            />
-          )
+          <ResolutionActions
+            stage={stage}
+            isReporter={ticket.created_by.id === user?.id}
+            onConfirm={runWorkflow(confirmTicket)}
+            onReopen={runWorkflow(reopenTicket)}
+          />
         }
       >
         {options && (
@@ -114,20 +136,43 @@ const IssueDetail = () => {
             <p className="text-xs light-muted mb-1">{t('issues.detail.building')}</p>
             <p className="text-sm light-text-navy">{ticket.building?.name ?? '—'}</p>
           </div>
-          <div>
-            <p className="text-xs light-muted mb-1">{t('issues.detail.apartment')}</p>
-            <p className="text-sm light-text-navy">
-              {ticket.apartment_id === null
-                ? t('issues.detail.buildingWideNotice')
-                : (ticket.apartment?.door_number ?? '—')}
-            </p>
-          </div>
-          <div>
-            <p className="text-xs light-muted mb-1">{t('issues.detail.category')}</p>
-            <p className="text-sm light-text-navy">
-              {options?.categories.find((c) => c.key === ticket.category)?.label ?? ticket.category}
-            </p>
-          </div>
+          {isIncident ? (
+            <>
+              <div>
+                <p className="text-xs light-muted mb-1">{t('incidents.fields.location')}</p>
+                <p className="text-sm light-text-navy">
+                  {ticket.area?.name ?? t('incidents.wholeBuilding')}
+                </p>
+              </div>
+              <div>
+                <p className="text-xs light-muted mb-1">{t('incidents.fields.kind')}</p>
+                <p className="text-sm light-text-navy">
+                  {[ticket.incident_type?.label, ticket.incident_subtype?.label]
+                    .filter(Boolean)
+                    .join(' · ') || '—'}
+                </p>
+              </div>
+            </>
+          ) : (
+            <>
+              <div>
+                <p className="text-xs light-muted mb-1">{t('issues.detail.apartment')}</p>
+                <p className="text-sm light-text-navy">
+                  {ticket.apartment_id === null
+                    ? t('issues.detail.buildingWideNotice')
+                    : (ticket.apartment?.door_number ?? '—')}
+                </p>
+              </div>
+              <div>
+                <p className="text-xs light-muted mb-1">{t('issues.detail.category')}</p>
+                <p className="text-sm light-text-navy">
+                  {options?.categories.find((c) => c.key === ticket.category)?.label ??
+                    ticket.category ??
+                    '—'}
+                </p>
+              </div>
+            </>
+          )}
           <div>
             <p className="text-xs light-muted mb-1">{t('issues.detail.reportedBy')}</p>
             <p className="text-sm light-text-navy">
@@ -146,6 +191,32 @@ const IssueDetail = () => {
             <p className="text-sm light-text-navy whitespace-pre-wrap">{ticket.description}</p>
           </div>
         )}
+
+        {ticket.photo && (
+          <div>
+            <p className="text-xs light-muted mb-1">{t('issues.detail.photo')}</p>
+            <a
+              href={`/api/tenant/tickets/${ticket.id}/photo`}
+              target="_blank"
+              rel="noreferrer"
+              className="block w-fit"
+            >
+              <img
+                src={`/api/tenant/tickets/${ticket.id}/photo`}
+                alt={ticket.photo.original_name}
+                className="max-h-64 max-w-full rounded-lg border border-gray-200 dark:border-white/5"
+              />
+            </a>
+          </div>
+        )}
+
+        {isIncident && (
+          <p className="text-sm">
+            <Link to={`/incidents/${ticket.id}`} className="light-link-action">
+              {t('incidents.viewPublicPage')}
+            </Link>
+          </p>
+        )}
       </ComponentCard>
 
       <Tabs defaultValue="notes">
@@ -163,7 +234,7 @@ const IssueDetail = () => {
                 <AlertDescription>{error}</AlertDescription>
               </Alert>
             )}
-            <TicketNoteThread notes={notes} onSubmit={handleAddNote} />
+            <TicketNoteThread ticketId={ticket.id} notes={notes} onSubmit={handleAddNote} />
           </TabsContent>
           <TabsContent value="history" className="mt-0">
             <StatusHistoryList entries={history} />

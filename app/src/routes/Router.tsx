@@ -29,6 +29,20 @@ const IssuesList = Loadable(lazy(() => import('../views/pages/issues/IssuesList'
 const CreateIssue = Loadable(lazy(() => import('../views/pages/issues/CreateIssue')));
 const IssueDetail = Loadable(lazy(() => import('../views/pages/issues/IssueDetail')));
 
+// public building incidents
+const IncidentsList = Loadable(lazy(() => import('../views/pages/incidents/IncidentsList')));
+const ReportIncident = Loadable(lazy(() => import('../views/pages/incidents/ReportIncident')));
+const IncidentDetail = Loadable(lazy(() => import('../views/pages/incidents/IncidentDetail')));
+
+// Owner/resident read-only views (server/resident.js)
+const BuildingsList = Loadable(lazy(() => import('../views/pages/buildings/BuildingsList')));
+const BuildingDetail = Loadable(lazy(() => import('../views/pages/buildings/BuildingDetail')));
+const Messages = Loadable(lazy(() => import('../views/pages/messages/Messages')));
+const PostMessage = Loadable(lazy(() => import('../views/pages/messages/PostMessage')));
+const BillsList = Loadable(lazy(() => import('../views/pages/bills/BillsList')));
+const BillDetail = Loadable(lazy(() => import('../views/pages/bills/BillDetail')));
+const Contacts = Loadable(lazy(() => import('../views/pages/contacts/Contacts')));
+
 const Error = Loadable(lazy(() => import('../views/authentication/Error')));
 
 const Router = [
@@ -44,6 +58,12 @@ const Router = [
 
           { path: '/user-profile', element: <UserProfile /> },
           { path: '/settings', element: <Settings /> },
+          { path: '/buildings', element: <BuildingsList /> },
+          { path: '/messages', element: <Messages /> },
+          { path: '/messages/new', element: <PostMessage /> },
+          { path: '/bills', element: <BillsList /> },
+          { path: '/bills/:id', element: <BillDetail /> },
+          { path: '/contacts', element: <Contacts /> },
 
           {
             element: (
@@ -55,6 +75,12 @@ const Router = [
               { path: '/issues', element: <IssuesList /> },
               { path: '/issues/new', element: <CreateIssue /> },
               { path: '/issues/:id', element: <IssueDetail /> },
+              // Incidents need ticket-options (incident kinds) and the
+              // reporter's confirm/reopen from useTickets().
+              { path: '/incidents', element: <IncidentsList /> },
+              { path: '/incidents/new', element: <ReportIncident /> },
+              { path: '/incidents/:id', element: <IncidentDetail /> },
+              { path: '/buildings/:id', element: <BuildingDetail /> },
             ],
           },
         ],

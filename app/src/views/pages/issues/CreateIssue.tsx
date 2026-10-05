@@ -1,5 +1,5 @@
 import { useEffect, useState, type FormEvent } from 'react';
-import { useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import BreadcrumbComp from 'src/layouts/full/shared/breadcrumb/BreadcrumbComp';
 import ComponentCard from 'src/components/shared/ComponentCard';
@@ -17,15 +17,15 @@ import {
 } from 'src/components/ui/select';
 import { useTickets } from 'src/context/tickets-context';
 import BuildingApartmentPicker from 'src/components/issues/BuildingApartmentPicker';
-import type { ApartmentSummary, BuildingSummary } from 'src/types/ticket';
+import type { MyApartment, ResidentBuilding } from 'src/types/resident';
 
 const CreateIssue = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { options, createTicket } = useTickets();
 
-  const [building, setBuilding] = useState<BuildingSummary | null>(null);
-  const [apartment, setApartment] = useState<ApartmentSummary | null>(null);
+  const [building, setBuilding] = useState<ResidentBuilding | null>(null);
+  const [apartment, setApartment] = useState<MyApartment | null>(null);
   const [category, setCategory] = useState('');
   const [priority, setPriority] = useState('');
   const [title, setTitle] = useState('');
@@ -83,6 +83,17 @@ const CreateIssue = () => {
         desc={t('issues.create.subtitle')}
       >
         <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
+          {/* A private ticket is only seen by me and staff - shared-area
+              problems belong on the public incident board instead. */}
+          <Alert variant="lightinfo">
+            <AlertDescription>
+              {t('issues.create.incidentHint')}{' '}
+              <Link to="/incidents/new" className="light-link-action">
+                {t('incidents.reportButton')}
+              </Link>
+            </AlertDescription>
+          </Alert>
+
           {error && (
             <Alert variant="lighterror">
               <AlertDescription>{error}</AlertDescription>

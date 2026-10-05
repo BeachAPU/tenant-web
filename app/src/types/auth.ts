@@ -19,4 +19,7 @@ export interface ApiErrorEnvelope {
   error_code: string;
   message: string;
   errors?: Record<string, string[]>;
+  // Machine-readable extras, e.g. `existing_incident_id` on a 409
+  // incident_duplicate.
+  details?: Record<string, unknown>;
 }

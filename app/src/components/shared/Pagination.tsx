@@ -23,7 +23,7 @@ const Pagination = ({
         className={arrow}
         disabled={current <= 1}
         onClick={() => onChange(current - 1)}
-        aria-label={t('issues.pagination.previous')}
+        aria-label={t('common.pagination.previous')}
       >
         <AngleLeftIcon className="size-5 [&_path]:stroke-current" />
       </button>
@@ -35,7 +35,7 @@ const Pagination = ({
         className={arrow}
         disabled={current >= total}
         onClick={() => onChange(current + 1)}
-        aria-label={t('issues.pagination.next')}
+        aria-label={t('common.pagination.next')}
       >
         <AngleRightIcon className="size-5 [&_path]:stroke-current" />
       </button>

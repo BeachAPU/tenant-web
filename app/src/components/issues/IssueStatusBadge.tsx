@@ -1,18 +1,18 @@
 import { Badge, type BadgeProps } from 'src/components/ui/badge';
-import type { TicketOption } from 'src/types/ticket';
+import type { TicketOption, TicketStage } from 'src/types/ticket';
 
-// Keyed off the *current* known seed statuses purely as a nicer default for
-// the common case - falls back to a generic, is_terminal-aware choice for
-// anything a tenant renames/adds, since these are admin-configurable, never
-// hardcoded assumptions the UI can rely on.
-const KNOWN_VARIANTS: Record<string, BadgeProps['variant']> = {
-  reported: 'lightInfo',
-  triaged: 'lightInfo',
-  scheduled: 'lightWarning',
-  in_progress: 'warning',
-  resolved: 'lightSuccess',
+// Statuses are tenant-configurable, so the colour comes from the workflow
+// stage, never the key: open = in progress, awaiting_confirmation = staff
+// say it's fixed, closed = done.
+const STAGE_VARIANTS: Record<TicketStage, BadgeProps['variant']> = {
+  open: 'lightWarning',
+  awaiting_confirmation: 'lightSuccess',
   closed: 'success',
 };
+
+export function stageBadgeVariant(stage?: TicketStage | null): BadgeProps['variant'] {
+  return stage ? STAGE_VARIANTS[stage] : 'gray';
+}
 
 const IssueStatusBadge = ({
   statusKey,
@@ -22,9 +22,8 @@ const IssueStatusBadge = ({
   statuses: TicketOption[];
 }) => {
   const status = statuses.find((option) => option.key === statusKey);
-  const variant = KNOWN_VARIANTS[statusKey] ?? (status?.is_terminal ? 'lightSuccess' : 'gray');
 
-  return <Badge variant={variant}>{status?.label ?? statusKey}</Badge>;
+  return <Badge variant={stageBadgeVariant(status?.stage)}>{status?.label ?? statusKey}</Badge>;
 };
 
 export default IssueStatusBadge;

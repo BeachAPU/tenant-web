@@ -2,3 +2,5 @@
 
 /.claude
 /.helpers
+# Playwright MCP session output (page snapshots, console logs, API dumps with account data)
+/.playwright-mcp

@@ -9,7 +9,12 @@
     "inactive": "Inactive",
     "goBackHome": "Go Back to Home",
     "backToLogin": "Back to login",
-    "delete": "Delete"
+    "delete": "Delete",
+    "download": "Download",
+    "pagination": {
+      "previous": "Previous page",
+      "next": "Next page"
+    }
   },
   "nav": {
     "home": "Home",
@@ -17,14 +22,24 @@
     "userProfile": "User Profile",
     "settings": "Settings",
     "myIssues": "My Issues",
-    "myHome": "My Home"
+    "myHome": "My Home",
+    "buildings": "My Buildings",
+    "messages": "Messages",
+    "bills": "Bills",
+    "contacts": "Contacts",
+    "incidents": "Building Incidents"
   },
   "home": {
     "welcomeTitle": "Welcome back, {{name}}",
     "welcomeSubtitle": "Here's your account at a glance.",
     "profileCardDescription": "View your account details and contact information.",
     "settingsCardDescription": "Manage your appearance and language preferences.",
-    "issuesCardDescription": "Report a problem in your building and follow its progress."
+    "issuesCardDescription": "Report a problem in your building and follow its progress.",
+    "buildingsCardDescription": "Your buildings and apartments, with everything about each in one place.",
+    "messagesCardDescription": "Announcements from your building management.",
+    "billsCardDescription": "Bills for your apartments and buildings, with their files.",
+    "contactsCardDescription": "Your building representatives and useful contacts.",
+    "incidentsCardDescription": "Lift out, lights off, insects - see what's already reported at your building, or report it."
   },
   "header": {
     "logout": "Logout",
@@ -38,7 +53,9 @@
     "toggleSidebar": "Toggle Sidebar",
     "moreActions": "More",
     "close": "Close",
-    "noNotifications": "No notifications yet."
+    "noNotifications": "No notifications yet.",
+    "notificationResolvedMine": "Staff marked your report as resolved. Please confirm it or tell them it's still not fixed.",
+    "notificationResolvedAffected": "An incident that affects you was resolved."
   },
   "auth": {
     "login": {
@@ -129,11 +146,6 @@
       "statusLabel": "Status",
       "statusAll": "All statuses"
     },
-    "pagination": {
-      "previous": "Previous",
-      "next": "Next",
-      "pageInfo": "Page {{current}} of {{total}}"
-    },
     "create": {
       "title": "Report an Issue",
       "subtitle": "Tell us what's going on and where - staff will pick it up from there.",
@@ -158,7 +170,8 @@
       "submitting": "Submitting…",
       "successMessage": "Your issue has been reported.",
       "genericError": "Something went wrong. Please try again.",
-      "backToList": "Back to My Issues"
+      "backToList": "Back to My Issues",
+      "incidentHint": "Only you and staff see this issue. Is it a problem in a shared area, like the lift, lights or insects?"
     },
     "detail": {
       "reportedBy": "Reported by",
@@ -181,16 +194,20 @@
       "noteError": "Couldn't post your reply. Please try again.",
       "historyEmpty": "No changes recorded yet.",
       "historyEntry": "{{field}} changed from {{oldValue}} to {{newValue}}",
-      "confirmCloseButton": "Confirm Fix & Close",
-      "confirmCloseDialogTitle": "Confirm this issue is fixed?",
-      "confirmCloseDialogBody": "This will close the issue. You can still reopen it later if needed.",
-      "reopenButton": "Not Fixed / Reopen",
-      "reopenDialogTitle": "Reopen this issue?",
-      "reopenDialogBody": "This will send the issue back to staff for another look.",
       "actionPendingNotice": "Staff are working on this issue.",
       "updateError": "Couldn't update this issue. Please try again.",
       "loadError": "Couldn't load this issue. Please try again.",
-      "notFound": "This issue could not be found."
+      "notFound": "This issue could not be found.",
+      "resolvedNotice": "Staff marked this as resolved.",
+      "confirmResolvedButton": "Confirm resolved",
+      "confirmResolvedDialogTitle": "Is it really fixed?",
+      "confirmResolvedDialogBody": "Confirming closes this issue for good. Report it again if the problem comes back.",
+      "stillNotFixedButton": "Still not fixed",
+      "stillNotFixedDialogTitle": "Still not fixed?",
+      "stillNotFixedDialogBody": "This sends it back to staff. Adding a reply below with what's still wrong helps them.",
+      "publicUpdate": "Public update",
+      "photo": "Photo",
+      "historySystem": "Closed automatically"
     },
     "allIssues": "All issues"
   },
@@ -203,5 +220,192 @@
       "title": "Maintenance Mode!!!",
       "message": "Website is Under Construction. Check back later!"
     }
+  },
+  "buildings": {
+    "listTitle": "My buildings",
+    "emptyState": "You are not linked to any apartment yet.",
+    "notFound": "This building could not be found.",
+    "openDetails": "Open",
+    "address": "Address",
+    "myApartments": "My apartments",
+    "commonAreas": "Common areas",
+    "floor": "floor {{floor}}",
+    "relation": {
+      "owner": "Owner",
+      "resident": "Resident",
+      "both": "Owner & resident"
+    },
+    "facts": {
+      "apartmentsCount": "Apartments",
+      "nonResidentialUnitsCount": "Non-residential units",
+      "usefulArea": "Useful area",
+      "nonResidentialArea": "Non-residential area",
+      "totalArea": "Total area"
+    },
+    "tabs": {
+      "overview": "Overview",
+      "contacts": "Contacts",
+      "messages": "Messages",
+      "bills": "Bills",
+      "incidents": "Incidents"
+    },
+    "incidentsEmpty": "No incidents reported at this building."
+  },
+  "messages": {
+    "boardTitle": "Building messages",
+    "boardDescription": "Announcements for your buildings and apartments.",
+    "emptyState": "No messages right now.",
+    "deleteConfirm": "Delete this message? This cannot be undone.",
+    "post": {
+      "title": "Post message",
+      "subtitle": "Send a message to your building, one of its common areas or your own apartment.",
+      "category": "Category",
+      "categoryPlaceholder": "Select a category",
+      "targets": "Recipients",
+      "building": "Building",
+      "buildingPlaceholder": "Select a building",
+      "scope": "Scope",
+      "wholeBuilding": "Whole building",
+      "commonAreas": "Common areas",
+      "myApartments": "My apartments",
+      "addTarget": "Add recipient",
+      "removeTarget": "Remove",
+      "body": "Message",
+      "attachment": "Attachment (optional)",
+      "attachmentTooLarge": "The attachment can be at most 20 MB.",
+      "submit": "Post",
+      "submitting": "Posting...",
+      "noBuildings": "You can post once you own or live in an apartment."
+    }
+  },
+  "bills": {
+    "listTitle": "My bills",
+    "emptyState": "No bills found.",
+    "notFound": "This bill could not be found.",
+    "detailTitle": "Bill details",
+    "downloadFile": "Download file",
+    "doorNumber": "Door {{door}}",
+    "wholeBuilding": "Whole building",
+    "status": {
+      "unpaid": "Unpaid",
+      "overdue": "Overdue",
+      "paid": "Paid",
+      "cancelled": "Cancelled"
+    },
+    "paymentMethod": {
+      "cash": "Cash",
+      "bank_transfer": "Bank transfer",
+      "card": "Card",
+      "other": "Other"
+    },
+    "table": {
+      "title": "Bill",
+      "target": "For",
+      "amount": "Amount",
+      "dueAt": "Due",
+      "status": "Status",
+      "file": "File"
+    },
+    "filters": {
+      "status": "Status",
+      "statusAll": "All statuses",
+      "target": "Building / apartment",
+      "targetAll": "All buildings",
+      "year": "Year",
+      "yearAll": "All years"
+    },
+    "fields": {
+      "billNumber": "Bill number",
+      "amount": "Amount",
+      "target": "For",
+      "category": "Category",
+      "issuedAt": "Issued",
+      "dueAt": "Due",
+      "paidAt": "Paid",
+      "cancelledAt": "Cancelled",
+      "note": "Note"
+    }
+  },
+  "contacts": {
+    "representative": "Representative",
+    "representatives": "Building representatives",
+    "noRepresentatives": "No representative is assigned to this building yet.",
+    "usefulContacts": "Useful contacts",
+    "usefulContactsDesc": "Contacts shared by your building management.",
+    "noContactCards": "No shared contacts yet."
+  },
+  "photo": {
+    "add": "Add photo",
+    "remove": "Remove photo",
+    "tooLarge": "This photo is too large (max {{max}})."
+  },
+  "incidents": {
+    "listTitle": "Incidents at my buildings",
+    "listDescription": "Problems in shared areas that everyone in the building can see. Press \"Me too\" if one affects you as well.",
+    "reportButton": "Report an incident",
+    "emptyOpen": "Nothing is reported right now.",
+    "emptyClosed": "No closed incidents.",
+    "notFound": "This incident could not be found.",
+    "detailTitle": "Incident",
+    "wholeBuilding": "Whole building",
+    "yourReport": "Your report",
+    "meToo": "Me too",
+    "meTooActive": "Affects me",
+    "meTooUndo": "Click to remove yourself",
+    "affectedCountTitle": "People affected",
+    "affectedCount_one": "{{count}} person affected",
+    "affectedCount_other": "{{count}} people affected",
+    "openMyReport": "Open my report (description, photo, messages)",
+    "viewPublicPage": "View the public incident page",
+    "updatesTitle": "Updates from staff",
+    "updatesDescription": "Everyone at the building sees these.",
+    "updatesEmpty": "No updates yet.",
+    "reportedByRole": {
+      "resident": "A resident",
+      "staff": "Staff"
+    },
+    "fields": {
+      "kind": "What",
+      "subtype": "Type",
+      "building": "Building",
+      "location": "Where",
+      "status": "Status",
+      "reportedBy": "Reported by",
+      "reportedOn": "Reported on",
+      "resolvedOn": "Resolved on",
+      "closedOn": "Closed on",
+      "affected": "Affected",
+      "description": "Description",
+      "photo": "Photo"
+    },
+    "filters": {
+      "state": {
+        "open": "Open",
+        "closed": "Closed",
+        "all": "All"
+      },
+      "allBuildings": "All buildings",
+      "allKinds": "All kinds"
+    },
+    "report": {
+      "title": "Report an Incident",
+      "cardTitle": "New incident",
+      "subtitle": "For problems in shared areas. Everyone at the building will see when, where and what - but not who reported it.",
+      "buildingPlaceholder": "Select a building",
+      "openAtBuilding": "Already reported at this building",
+      "noneOpen": "Nothing is open at this building right now.",
+      "openHint": "If your problem is listed, press \"Me too\" instead of reporting it again.",
+      "kindPlaceholder": "What is the problem?",
+      "noSubtype": "Not sure / other",
+      "duplicate": "\"{{kind}}\" in {{area}} is already reported and still open. Press \"Me too\" to add yourself instead.",
+      "openExisting": "Open that incident",
+      "descriptionPlaceholder": "Anything that helps staff find and fix it",
+      "privateHint": "Only staff see the description and photo.",
+      "submit": "Report incident",
+      "submitting": "Reporting…"
+    },
+    "recentTitle": "Recently closed",
+    "recentDescription": "Incidents closed in the last {{days}} days.",
+    "recentEmpty": "Nothing was closed recently."
   }
 }

@@ -26,7 +26,9 @@ const IssuesList = () => {
     setLoading(true);
     setError(null);
 
-    listTickets(filters).then((result) => {
+    // Private tickets only - building incidents (including my own reports
+    // of them) live on /incidents.
+    listTickets({ ...filters, kind: 'private' }).then((result) => {
       if (cancelled) return;
       setLoading(false);
       if (result.ok) {

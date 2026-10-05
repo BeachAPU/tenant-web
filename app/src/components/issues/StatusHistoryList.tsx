@@ -21,7 +21,10 @@ const StatusHistoryList = ({ entries }: { entries: TicketStatusHistoryEntry[] })
             })}
           </p>
           <p className="text-xs light-muted">
-            {entry.changed_by.first_name} {entry.changed_by.last_name} ·{' '}
+            {entry.changed_by
+              ? `${entry.changed_by.first_name} ${entry.changed_by.last_name}`
+              : t('issues.detail.historySystem')}{' '}
+            ·{' '}
             {formatDate(entry.created_at)}
           </p>
         </li>

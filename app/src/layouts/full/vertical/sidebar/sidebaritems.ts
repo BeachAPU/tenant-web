@@ -1,9 +1,20 @@
 import type { ComponentType, SVGProps } from 'react';
-import { ChatIcon, GridIcon } from 'src/icons';
+import {
+  AlertIcon,
+  BoxCubeIcon,
+  ChatIcon,
+  DollarLineIcon,
+  GridIcon,
+  GroupIcon,
+  MailIcon,
+} from 'src/icons';
 
 // DESIGN.md §12: nav icons are admin's SVG components, not icon-library names,
 // with the same meaning as in admin's catalogue (§12.1): Dashboard = GridIcon,
-// Tickets = ChatIcon.
+// Tickets = ChatIcon, Bills = DollarLineIcon, people = GroupIcon; Messages =
+// MailIcon as in tenant-admin; Building incidents = AlertIcon (warnings).
+// §12.1 has no building icon yet, so My Buildings uses BoxCubeIcon until one
+// is added to the shared set.
 export type SidebarIcon = ComponentType<SVGProps<SVGSVGElement>>;
 
 export interface ChildItem {
@@ -64,10 +75,50 @@ const SidebarContent: MenuItem[] = [
       },
       {
         id: uniqueId(),
+        name: 'My Buildings',
+        nameKey: 'nav.buildings',
+        icon: BoxCubeIcon,
+        url: '/buildings',
+        isPro: false,
+      },
+      {
+        id: uniqueId(),
+        name: 'Building Incidents',
+        nameKey: 'nav.incidents',
+        icon: AlertIcon,
+        url: '/incidents',
+        isPro: false,
+      },
+      {
+        id: uniqueId(),
         name: 'My Issues',
         nameKey: 'nav.myIssues',
         icon: ChatIcon,
         url: '/issues',
+        isPro: false,
+      },
+      {
+        id: uniqueId(),
+        name: 'Messages',
+        nameKey: 'nav.messages',
+        icon: MailIcon,
+        url: '/messages',
+        isPro: false,
+      },
+      {
+        id: uniqueId(),
+        name: 'Bills',
+        nameKey: 'nav.bills',
+        icon: DollarLineIcon,
+        url: '/bills',
+        isPro: false,
+      },
+      {
+        id: uniqueId(),
+        name: 'Contacts',
+        nameKey: 'nav.contacts',
+        icon: GroupIcon,
+        url: '/contacts',
         isPro: false,
       },
     ],

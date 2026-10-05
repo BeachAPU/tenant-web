@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { callLaravel } from './laravel-client.js';
 import { resolveEnvironment } from './environment.js';
 import { registerTicketRoutes } from './tickets.js';
+import { registerResidentRoutes } from './resident.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DEVICE_NAME = 'tenant-web';
@@ -74,8 +75,8 @@ app.post('/api/tenant/login', async (req, res) => {
 
   if (result.status === 200 && result.body?.token) {
     req.session.token = result.body.token;
-    req.session.user = result.body.user;
-    res.status(200).json({ user: result.body.user, environment });
+    req.session.user = toClientUser(result.body.user);
+    res.status(200).json({ user: req.session.user, environment });
     return;
   }
 
@@ -161,18 +162,26 @@ app.post('/api/tenant/reset-password', async (req, res) => {
   }
 });
 
-// UI preferences (theme/language) - NOT live yet. Checked against the real
-// API (`php artisan route:list`) on 2026-09-21: `PATCH /api/tenant/me/preferences`
-// doesn't exist (only admin-ui's own `PATCH /api/me/preferences` does), and
-// `GlobalUser` has no `theme` column yet either - FEATURES.md describes this
-// as in-progress work for tenant-admin-ui, not yet landed, with tenant-web-ui
-// reusing it vs. getting its own endpoint still an open question. This BFF
-// route is wired ahead of the endpoint on purpose (same "build against the
-// contract before it lands" approach FEATURES.md says tenant-admin-ui's
-// frontend is taking) - it will 502/404 until the API adds this route, which
-// `AuthProvider.savePreferences()` on the client already treats as a
-// best-effort, swallowed failure (the local theme/language switch still
-// applies immediately either way).
+// UI preferences (theme/language), saved to the account by the API's
+// `PATCH /api/tenant/me/preferences` (UpdatePreferencesRequest). The API
+// stores theme as an object, `{ mode: 'light' | 'dark' }` (no 'system'),
+// while this app's client works with the plain ThemePreference string - the
+// translation both ways happens only here (toApiPreferences/toClientUser),
+// so the client never sees the API's shape. 'system' has no API value, so
+// picking it only applies locally and leaves the saved theme unchanged.
+function toApiPreferences({ theme, locale }) {
+  return {
+    ...(theme === 'light' || theme === 'dark' ? { theme: { mode: theme } } : {}),
+    ...(locale !== undefined ? { locale } : {}),
+  };
+}
+
+function toClientUser(user) {
+  if (!user) return user;
+  const mode = user.theme?.mode;
+  return { ...user, theme: mode === 'light' || mode === 'dark' ? mode : undefined };
+}
+
 app.patch('/api/tenant/me/preferences', async (req, res) => {
   if (!req.session.token) {
     res.status(401).json({ error_code: 'unauthenticated', message: 'Not signed in.' });
@@ -180,10 +189,11 @@ app.patch('/api/tenant/me/preferences', async (req, res) => {
   }
 
   const { theme, locale } = req.body ?? {};
-  const preferences = {
-    ...(theme !== undefined ? { theme } : {}),
-    ...(locale !== undefined ? { locale } : {}),
-  };
+  const preferences = toApiPreferences({ theme, locale });
+  if (Object.keys(preferences).length === 0) {
+    res.status(204).end();
+    return;
+  }
 
   try {
     const result = await callLaravel('/api/tenant/me/preferences', {
@@ -194,7 +204,13 @@ app.patch('/api/tenant/me/preferences', async (req, res) => {
     });
 
     if (result.status >= 200 && result.status < 300) {
-      req.session.user = { ...req.session.user, ...preferences };
+      req.session.user = result.body?.data
+        ? toClientUser(result.body.data)
+        : {
+            ...req.session.user,
+            ...(theme !== undefined ? { theme } : {}),
+            ...(locale !== undefined ? { locale } : {}),
+          };
     }
     res.status(result.status).json(result.body ?? {});
   } catch {
@@ -206,6 +222,7 @@ app.patch('/api/tenant/me/preferences', async (req, res) => {
 });
 
 registerTicketRoutes(app);
+registerResidentRoutes(app);
 
 app.use(express.static(path.join(__dirname, '..', 'dist')));
 app.get(/^(?!\/api\/).*/, (_req, res) => {

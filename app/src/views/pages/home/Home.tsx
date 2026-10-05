@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { ChatIcon, PlugInIcon, UserCircleIcon } from 'src/icons';
+import { AlertIcon, BoxCubeIcon, ChatIcon, DollarLineIcon, GroupIcon, MailIcon } from 'src/icons';
 import BreadcrumbComp from 'src/layouts/full/shared/breadcrumb/BreadcrumbComp';
 import { useAuth } from 'src/context/auth-context';
 
@@ -8,22 +8,40 @@ import { useAuth } from 'src/context/auth-context';
 // `.light-icon-btn` icon.
 const QUICK_LINKS = [
   {
+    to: '/buildings',
+    icon: BoxCubeIcon,
+    titleKey: 'nav.buildings',
+    descriptionKey: 'home.buildingsCardDescription',
+  },
+  {
+    to: '/incidents',
+    icon: AlertIcon,
+    titleKey: 'nav.incidents',
+    descriptionKey: 'home.incidentsCardDescription',
+  },
+  {
     to: '/issues',
     icon: ChatIcon,
     titleKey: 'nav.myIssues',
     descriptionKey: 'home.issuesCardDescription',
   },
   {
-    to: '/user-profile',
-    icon: UserCircleIcon,
-    titleKey: 'nav.userProfile',
-    descriptionKey: 'home.profileCardDescription',
+    to: '/messages',
+    icon: MailIcon,
+    titleKey: 'nav.messages',
+    descriptionKey: 'home.messagesCardDescription',
   },
   {
-    to: '/settings',
-    icon: PlugInIcon,
-    titleKey: 'nav.settings',
-    descriptionKey: 'home.settingsCardDescription',
+    to: '/bills',
+    icon: DollarLineIcon,
+    titleKey: 'nav.bills',
+    descriptionKey: 'home.billsCardDescription',
+  },
+  {
+    to: '/contacts',
+    icon: GroupIcon,
+    titleKey: 'nav.contacts',
+    descriptionKey: 'home.contactsCardDescription',
   },
 ];
 

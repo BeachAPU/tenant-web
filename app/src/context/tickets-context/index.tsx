@@ -1,5 +1,11 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
-import type { ApiErrorEnvelope } from 'src/types/auth';
+import {
+  apiSend,
+  genericError,
+  parseErrorResponse,
+  toQueryString,
+  type ActionResult,
+} from 'src/lib/api';
 import type {
   CreateTicketPayload,
   PaginatedResult,
@@ -10,10 +16,6 @@ import type {
   TicketStatusHistoryEntry,
 } from 'src/types/ticket';
 
-type ActionResult<T> =
-  | { ok: true; data: T }
-  | { ok: false; error: string; fieldErrors?: Record<string, string[]> };
-
 type TicketsContextState = {
   options: TicketOptions | null;
   optionsLoading: boolean;
@@ -23,32 +25,16 @@ type TicketsContextState = {
   listTickets: (filters: TicketFilters) => Promise<ActionResult<PaginatedResult<Ticket>>>;
   getTicket: (id: number) => Promise<ActionResult<Ticket>>;
   createTicket: (payload: CreateTicketPayload) => Promise<ActionResult<Ticket>>;
-  updateTicketStatus: (id: number, status: string) => Promise<ActionResult<Ticket>>;
+  confirmTicket: (id: number) => Promise<ActionResult<Ticket>>;
+  reopenTicket: (id: number) => Promise<ActionResult<Ticket>>;
 
   listNotes: (ticketId: number) => Promise<ActionResult<TicketNote[]>>;
-  addNote: (ticketId: number, body: string) => Promise<ActionResult<TicketNote>>;
+  addNote: (ticketId: number, body: string, photo?: File | null) => Promise<ActionResult<TicketNote>>;
 
   getStatusHistory: (ticketId: number) => Promise<ActionResult<TicketStatusHistoryEntry[]>>;
 };
 
 const TicketsContext = createContext<TicketsContextState | undefined>(undefined);
-
-const genericError = 'Something went wrong. Please try again.';
-
-async function parseErrorResponse(res: Response): Promise<{ error: string; fieldErrors?: Record<string, string[]> }> {
-  const body = (await res.json().catch(() => null)) as ApiErrorEnvelope | null;
-  return { error: body?.message ?? genericError, fieldErrors: body?.errors };
-}
-
-function toQueryString(params: Record<string, string | number | undefined>): string {
-  const usp = new URLSearchParams();
-  for (const [key, value] of Object.entries(params)) {
-    if (value === undefined || value === '') continue;
-    usp.set(key, String(value));
-  }
-  const qs = usp.toString();
-  return qs ? `?${qs}` : '';
-}
 
 export function TicketsProvider({ children }: { children: ReactNode }) {
   const [options, setOptions] = useState<TicketOptions | null>(null);
@@ -79,7 +65,9 @@ export function TicketsProvider({ children }: { children: ReactNode }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const listTickets = async (filters: TicketFilters): Promise<ActionResult<PaginatedResult<Ticket>>> => {
+  const listTickets = async (
+    filters: TicketFilters,
+  ): Promise<ActionResult<PaginatedResult<Ticket>>> => {
     try {
       const qs = toQueryString(filters);
       const res = await fetch(`/api/tenant/tickets${qs}`);
@@ -126,25 +114,14 @@ export function TicketsProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  // The only write path exposed to components - deliberately narrow, see
-  // IssueCloseReopenActions. Never sends any field beyond `status`.
-  const updateTicketStatus = async (id: number, status: string): Promise<ActionResult<Ticket>> => {
-    try {
-      const res = await fetch(`/api/tenant/tickets/${id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status }),
-      });
-      if (!res.ok) {
-        const { error } = await parseErrorResponse(res);
-        return { ok: false, error };
-      }
-      const body = await res.json();
-      return { ok: true, data: body.data as Ticket };
-    } catch {
-      return { ok: false, error: genericError };
-    }
-  };
+  // The reporter's only write paths besides notes: once staff mark a ticket
+  // resolved (stage awaiting_confirmation) they confirm it (-> closed) or
+  // send it back (-> open). The API refuses any field edit from a resident.
+  const confirmTicket = (id: number) =>
+    apiSend<Ticket>(`/api/tenant/tickets/${id}/confirm`, { method: 'POST' });
+
+  const reopenTicket = (id: number) =>
+    apiSend<Ticket>(`/api/tenant/tickets/${id}/reopen`, { method: 'POST' });
 
   const listNotes = async (ticketId: number): Promise<ActionResult<TicketNote[]>> => {
     try {
@@ -160,25 +137,16 @@ export function TicketsProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const addNote = async (ticketId: number, body: string): Promise<ActionResult<TicketNote>> => {
-    try {
-      const res = await fetch(`/api/tenant/tickets/${ticketId}/notes`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ body }),
-      });
-      if (!res.ok) {
-        const { error } = await parseErrorResponse(res);
-        return { ok: false, error };
-      }
-      const responseBody = await res.json();
-      return { ok: true, data: responseBody.data as TicketNote };
-    } catch {
-      return { ok: false, error: genericError };
-    }
+  const addNote = (ticketId: number, body: string, photo?: File | null) => {
+    const form = new FormData();
+    form.set('body', body);
+    if (photo) form.set('attachment', photo);
+    return apiSend<TicketNote>(`/api/tenant/tickets/${ticketId}/notes`, { body: form });
   };
 
-  const getStatusHistory = async (ticketId: number): Promise<ActionResult<TicketStatusHistoryEntry[]>> => {
+  const getStatusHistory = async (
+    ticketId: number,
+  ): Promise<ActionResult<TicketStatusHistoryEntry[]>> => {
     try {
       const res = await fetch(`/api/tenant/tickets/${ticketId}/status-history`);
       if (!res.ok) {
@@ -202,7 +170,8 @@ export function TicketsProvider({ children }: { children: ReactNode }) {
         listTickets,
         getTicket,
         createTicket,
-        updateTicketStatus,
+        confirmTicket,
+        reopenTicket,
         listNotes,
         addNote,
         getStatusHistory,
